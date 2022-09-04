@@ -17,17 +17,16 @@ import HideWithKeyboard from "react-native-hide-with-keyboard";
 import Icon from "./Icon";
 
 const RegistrationScreen = () => {
+  const secondInput = useRef();
+  const thirdInput = useRef();
   const [isImageSet, setIsImageSet] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
   const [formState, setFormState] = useState({
-    login: "",
+    username: "",
     email: "",
     password: "",
   });
-
-  const secondInput = useRef();
-  const thirdInput = useRef();
 
   const handleSubmit = () => {
     console.log(formState);
@@ -77,13 +76,13 @@ const RegistrationScreen = () => {
             textContentType="username"
             autoCapitalize="none"
             returnKeyType="next"
-            placeholder="Login"
+            placeholder="Username"
             onSubmitEditing={() => secondInput.current.focus()}
             blurOnSubmit={false}
             onFocus={() => setFocusedInput(0)}
             onChangeText={(text) =>
               setFormState((prevState) => {
-                return { ...prevState, login: text };
+                return { ...prevState, username: text };
               })
             }
           />
@@ -115,7 +114,7 @@ const RegistrationScreen = () => {
                 marginBottom: 0,
                 borderColor: focusedInput === 2 ? "#FF6C00" : "#E8E8E8",
               }}
-              autocomplete="new-password"
+              autocomplete="password-new"
               textContentType="newPassword"
               autoCapitalize="none"
               autoCorrect={false}
@@ -131,6 +130,7 @@ const RegistrationScreen = () => {
             />
             <TouchableOpacity
               style={styles.showPasswordBtn}
+              activeOpacity={0.6}
               onPress={() => setIsPasswordHidden(!isPasswordHidden)}
             >
               <Text style={styles.showPasswordText}>
@@ -139,7 +139,11 @@ const RegistrationScreen = () => {
             </TouchableOpacity>
           </View>
           <HideWithKeyboard>
-            <TouchableOpacity style={styles.signupBtn} onPress={handleSubmit}>
+            <TouchableOpacity
+              style={styles.signupBtn}
+              activeOpacity={0.5}
+              onPress={handleSubmit}
+            >
               <Text style={styles.signupText}>Sign Up</Text>
             </TouchableOpacity>
             <Text style={styles.loginLink}>
@@ -155,7 +159,7 @@ export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   mainBlock: {
-    fontFamily: 'RobotoRegular',
+    fontFamily: "RobotoRegular",
     height: "100%",
   },
 
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   formTitle: {
-    fontFamily: 'RobotoMedium',
+    fontFamily: "RobotoMedium",
     fontSize: 30,
     lineHeight: 35,
     marginBottom: 33,

@@ -5,6 +5,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
+import LoginScreen from './Screens/LoginScreen/LoginScreen'
 
 SplashScreen.preventAutoHideAsync();
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
     const prepare = async () => {
       try {
         await Font.loadAsync({
+          RobotoRegular: require("./assets/fonts/Roboto-Regular.ttf"),
           RobotoMedium: require("./assets/fonts/Roboto-Medium.ttf"),
         });
         const images = [
@@ -47,6 +49,7 @@ const App = () => {
   return (
     <View onLayout={onLayoutRootView}>
       <RegistrationScreen />
+      {/* <LoginScreen/> */}
     </View>
   );
 };
