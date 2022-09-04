@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -7,72 +7,155 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
 } from "react-native";
+import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import Icon from "./Icon";
 
 const RegistrationScreen = () => {
   const [isImageSet, setIsImageSet] = useState(false);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [formState, setFormState] = useState({
+    login: "",
+    email: "",
+    password: "",
+  });
+
+  const secondInput = useRef();
+  const thirdInput = useRef();
+
+  const handleSubmit = () => {
+    console.log(formState);
+  };
+
   return (
-    <View style={styles.mainBlock}>
-      <ImageBackground
-        style={styles.backgroundImg}
-        source={require("../../assets/background.png")}
-      />
-      <View style={styles.form}>
-        <TouchableOpacity
-          style={styles.userAvatarBlock}
-          activeOpacity={0.9}
-          onPress={() => setIsImageSet(!isImageSet)}
-        >
-          {isImageSet ? (
-            <>
-              <Image
-                style={{ height: "100%", width: "100%", borderRadius: 16 }}
-                source={require("../../assets/myAvatar.jpg")}
-              />
-              <Icon
-                style={{
-                  ...styles.userAvatarIcon,
-                  transform: [{ rotate: "45deg" }],
-                }}
-                fill="#BDBDBD"
-              />
-            </>
-          ) : (
-            <Icon style={styles.userAvatarIcon} />
-          )}
-        </TouchableOpacity>
-        <Text style={styles.formTitle}>Sign Up</Text>
-        <TextInput style={styles.input} type="text" placeholder="Login" />
-        <TextInput
-          style={styles.input}
-          type="email"
-          placeholder="Your email address"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.mainBlock}>
+        <ImageBackground
+          style={styles.backgroundImg}
+          source={require("../../assets/background.png")}
         />
-        <View style={styles.passwordBlock}>
-          <TextInput
-            style={{ ...styles.input, marginBottom: 0 }}
-            type="password"
-            placeholder="Password"
-          />
-          <TouchableOpacity style={styles.showPasswordBtn}>
-            <Text style={styles.showPasswordText}>Show</Text>
+        <KeyboardAvoidingView
+          style={styles.form}
+          behavior={Platform.OS == "ios" && "padding"}
+        >
+          <TouchableOpacity
+            style={styles.userAvatarBlock}
+            activeOpacity={0.9}
+            onPress={() => setIsImageSet(!isImageSet)}
+          >
+            {isImageSet ? (
+              <>
+                <Image
+                  style={{ height: "100%", width: "100%", borderRadius: 16 }}
+                  source={require("../../assets/myAvatar.jpg")}
+                />
+                <Icon
+                  style={{
+                    ...styles.userAvatarIcon,
+                    transform: [{ rotate: "45deg" }],
+                  }}
+                  fill="#BDBDBD"
+                />
+              </>
+            ) : (
+              <Icon style={styles.userAvatarIcon} />
+            )}
           </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.signupBtn}>
-          <Text style={styles.signupText}>Sign Up</Text>
-        </TouchableOpacity>
-        <Text style={styles.loginLink}>Already have an account? Log In</Text>
+          <Text style={styles.formTitle}>Sign Up</Text>
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor: focusedInput === 0 ? "#FF6C00" : "#E8E8E8",
+            }}
+            autoComplete="username-new"
+            textContentType="username"
+            autoCapitalize="none"
+            returnKeyType="next"
+            placeholder="Login"
+            onSubmitEditing={() => secondInput.current.focus()}
+            blurOnSubmit={false}
+            onFocus={() => setFocusedInput(0)}
+            onChangeText={(text) =>
+              setFormState((prevState) => {
+                return { ...prevState, login: text };
+              })
+            }
+          />
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor: focusedInput === 1 ? "#FF6C00" : "#E8E8E8",
+            }}
+            autoComplete="email"
+            textContentType="emailAddress"
+            autoCapitalize="none"
+            returnKeyType="next"
+            keyboardType="email-address"
+            placeholder="Your email address"
+            onSubmitEditing={() => thirdInput.current.focus()}
+            ref={secondInput}
+            blurOnSubmit={false}
+            onFocus={() => setFocusedInput(1)}
+            onChangeText={(text) =>
+              setFormState((prevState) => {
+                return { ...prevState, email: text };
+              })
+            }
+          />
+          <View style={{ ...styles.passwordBlock, marginBottom: 46 }}>
+            <TextInput
+              style={{
+                ...styles.input,
+                marginBottom: 0,
+                borderColor: focusedInput === 2 ? "#FF6C00" : "#E8E8E8",
+              }}
+              autocomplete="new-password"
+              textContentType="newPassword"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={isPasswordHidden}
+              placeholder="Password"
+              ref={thirdInput}
+              onFocus={() => setFocusedInput(2)}
+              onChangeText={(text) =>
+                setFormState((prevState) => {
+                  return { ...prevState, password: text };
+                })
+              }
+            />
+            <TouchableOpacity
+              style={styles.showPasswordBtn}
+              onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+            >
+              <Text style={styles.showPasswordText}>
+                {isPasswordHidden ? "Show" : "Hide"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <HideWithKeyboard>
+            <TouchableOpacity style={styles.signupBtn} onPress={handleSubmit}>
+              <Text style={styles.signupText}>Sign Up</Text>
+            </TouchableOpacity>
+            <Text style={styles.loginLink}>
+              Already have an account? Log In
+            </Text>
+          </HideWithKeyboard>
+        </KeyboardAvoidingView>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
-
 export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   mainBlock: {
+    fontFamily: 'RobotoRegular',
     height: "100%",
   },
 
@@ -83,7 +166,7 @@ const styles = StyleSheet.create({
   form: {
     backgroundColor: "white",
     position: "relative",
-    height: "68%",
+    maxHeight: "87%",
     marginTop: "auto",
     paddingTop: 92,
     borderTopLeftRadius: 25,
@@ -91,11 +174,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   formTitle: {
-    // !   Добавить font-weight 500
+    fontFamily: 'RobotoMedium',
     fontSize: 30,
-    lineHeight: 0.85,
-    letterSpacing: "0.01em",
+    lineHeight: 35,
+    marginBottom: 33,
     color: "#212121",
+    textAlign: "center",
   },
   userAvatarBlock: {
     position: "absolute",
@@ -120,15 +204,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: "#E8E8E8",
     borderRadius: 8,
     fontSize: 16,
-    lineHeight: 0.84,
+    lineHeight: 19,
   },
   passwordBlock: {
     position: "relative",
     width: "100%",
-    marginBottom: 43,
   },
   showPasswordBtn: {
     position: "absolute",
@@ -138,11 +220,10 @@ const styles = StyleSheet.create({
     right: 0,
     height: "100%",
     width: "20%",
-    // backgroundColor: "green",
   },
   showPasswordText: {
     fontSize: 16,
-    lineHeight: 0.84,
+    lineHeight: 19,
     color: "#1B4371",
   },
 
@@ -158,13 +239,14 @@ const styles = StyleSheet.create({
   signupText: {
     color: "white",
     fontSize: 16,
-    lineHeight: 0.84,
+    lineHeight: 19,
   },
 
   loginLink: {
     fontSize: 16,
-    lineHeight: 0.84,
+    lineHeight: 19,
     textAlign: "center",
     color: "#1B4371",
+    marginBottom: 66,
   },
 });
