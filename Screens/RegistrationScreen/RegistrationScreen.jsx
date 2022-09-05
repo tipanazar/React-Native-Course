@@ -16,7 +16,7 @@ import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import Icon from "./Icon";
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const secondInput = useRef();
   const thirdInput = useRef();
   const [isImageSet, setIsImageSet] = useState(false);
@@ -146,9 +146,11 @@ const RegistrationScreen = () => {
             >
               <Text style={styles.signupText}>Sign Up</Text>
             </TouchableOpacity>
-            <Text style={styles.loginLink}>
-              Already have an account? Log In
-            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Log In")}>
+              <Text style={styles.loginLink}>
+                Already have an account? Log In
+              </Text>
+            </TouchableOpacity>
           </HideWithKeyboard>
         </KeyboardAvoidingView>
       </View>
@@ -252,5 +254,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1B4371",
     marginBottom: 66,
+    textDecorationLine: "underline",
   },
 });

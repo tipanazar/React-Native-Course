@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const secondInput = useRef();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -97,7 +97,13 @@ const LoginScreen = () => {
             >
               <Text style={styles.btnText}>Log In</Text>
             </TouchableOpacity>
-            <Text style={styles.signupLink}>Haven't account yet? Sign Up</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Sign Up")}
+            >
+              <Text style={styles.signupLink}>
+                Haven't account yet? Sign Up
+              </Text>
+            </TouchableOpacity>
           </HideWithKeyboard>
         </KeyboardAvoidingView>
       </View>
@@ -187,5 +193,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1B4371",
     marginBottom: 66,
+    textDecorationLine: "underline",
   },
 });
