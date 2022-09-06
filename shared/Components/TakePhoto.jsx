@@ -67,13 +67,13 @@ const TakePhoto = ({ mainBlockStyle }) => {
           <CameraIcon fill={hasPermission && "#fff"} />
         </View>
       </TouchableOpacity>
-      {hasPermission === true ? (
-        <Text style={styles.cameraBlockTitle}>Upload Photos.</Text>
-      ) : (
-        <Text style={styles.cameraBlockTitle}>
-          Importing photos requires access to your camera and device storage.
-        </Text>
-      )}
+      <Text style={styles.cameraBlockTitle}>
+        {hasPermission === true
+          ? img.id.length
+            ? "Remove Photo"
+            : "Take a Photo"
+          : "Importing photos requires access to your camera and device storage."}
+      </Text>
     </View>
   );
 };
