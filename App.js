@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 
-import AuthNavigation from "./shared/Components/AuthNavigation/AuthNavigation";
+import AuthNavigation from "./shared/Components/AuthNavigation";
 import Home from "./Screens/Home";
 
 SplashScreen.preventAutoHideAsync();
@@ -47,17 +48,12 @@ const App = () => {
     return null;
   }
 
-  if (!isAuth) {
-    return (
-      <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
-        <AuthNavigation />
-      </View>
-    );
-  }
-
   return (
     <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
-      <Home />
+    <NavigationContainer>
+
+      {isAuth ? <Home /> : <AuthNavigation />}
+      </NavigationContainer>
     </View>
   );
 };

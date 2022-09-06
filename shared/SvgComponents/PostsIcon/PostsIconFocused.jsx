@@ -9,7 +9,7 @@ const PostsIconFocused = () => {
         clip-rule="evenodd"
         d="M11 11h7v7h-7v-7ZM22 11h7v7h-7v-7ZM22 22h7v7h-7v-7ZM11 22h7v7h-7v-7Z"
         fill="#007bff"
-        stroke="#007bff"
+        stroke="black"
         stroke-opacity=".8"
         stroke-linecap="round"
         stroke-linejoin="round"

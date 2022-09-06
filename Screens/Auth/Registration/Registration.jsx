@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-import Icon from "./Icon";
+import Icon from "../../../shared/SvgComponents/AddAvatarIcon";
 
 const Registration = ({ navigation }) => {
   const secondInput = useRef();

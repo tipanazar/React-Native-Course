@@ -1,4 +1,4 @@
-import MainNavigation from "../shared/Components/MainNavigation/MainNavigation";
+import MainNavigation from "../shared/Components/MainNavigation";
 
 const Home = () => {
   return <MainNavigation />;

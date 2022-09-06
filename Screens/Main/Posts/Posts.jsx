@@ -1,6 +1,6 @@
 import { Text } from "react-native";
 
-const PostsScreen = () => {
+const Posts = () => {
   return <Text>PostsScreen</Text>;
 };
-export default PostsScreen;
+export default Posts;
