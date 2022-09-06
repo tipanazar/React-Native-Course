@@ -50,9 +50,8 @@ const App = () => {
 
   return (
     <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
-    <NavigationContainer>
-
-      {isAuth ? <Home /> : <AuthNavigation />}
+      <NavigationContainer>
+        {isAuth ? <Home /> : <AuthNavigation />}
       </NavigationContainer>
     </View>
   );

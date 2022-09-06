@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import TakePhoto from "../../../shared/Components/TakePhoto";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
+import TakePhoto from "../../../shared/Components/TakePhoto";
 
 const CreatePost = () => {
   return (
@@ -36,6 +40,7 @@ const styles = StyleSheet.create({
 
   takePhotoBlock: {
     height: 267,
-    marginBottom: 33
+    height: wp("61.5%") + 27,
+    marginBottom: 33,
   },
 });

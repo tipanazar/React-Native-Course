@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
@@ -8,9 +8,7 @@ import { CameraIcon } from "../SvgComponents";
 const TakePhoto = ({ mainBlockStyle }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-
-  console.log(hasPermission);
+  const [img, setImg] = useState({ uri: "", id: "" });
 
   useEffect(() => {
     (async () => {
@@ -20,15 +18,54 @@ const TakePhoto = ({ mainBlockStyle }) => {
     })();
   });
 
+  const getPic = async () => {
+    const album = await MediaLibrary.getAlbumAsync("OnlineGallery");
+    if (!album) {
+      const { uri } = await cameraRef.takePictureAsync();
+      const newPic = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.createAlbumAsync("OnlineGallery", newPic.id);
+      setImg({ uri: newPic.uri, id: newPic.id });
+      return;
+    }
+    const { uri } = await cameraRef.takePictureAsync();
+    const newPic = await MediaLibrary.createAssetAsync(uri);
+    await MediaLibrary.addAssetsToAlbumAsync([newPic.id], album.id);
+    setImg({ uri: newPic.uri, id: newPic.id });
+  };
+
   return (
     <View style={mainBlockStyle}>
-      <TouchableOpacity style={styles.cameraBlock}>
-        <Camera type={cameraType} ref={(ref) => setCameraRef(ref)}>
-        <View style={styles.cameraIconBlock}>
-          <CameraIcon />
+      <TouchableOpacity
+        style={styles.cameraBlock}
+        onPress={async () => {
+          console.log("click!");
+          if (cameraRef) {
+            await getPic();
+          }
+          if (img.uri.length) {
+            await MediaLibrary.deleteAssetsAsync([img.id]);
+            setImg({ uri: "", id: "" });
+          }
+        }}
+      >
+        {img.uri.length ? (
+          <Image source={{ uri: img.uri }} style={styles.camera} />
+        ) : (
+          <Camera
+            type="back"
+            flashMode="auto"
+            ref={(ref) => setCameraRef(ref)}
+            style={styles.camera}
+          />
+        )}
+        <View
+          style={{
+            ...styles.cameraIconBlock,
+            backgroundColor: hasPermission && "#FFFFFF4D",
+          }}
+        >
+          <CameraIcon fill={hasPermission && "#fff"} />
         </View>
-
-        </Camera>
       </TouchableOpacity>
       {hasPermission === true ? (
         <Text style={styles.cameraBlockTitle}>Upload Photos.</Text>
@@ -48,17 +85,18 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: 240,
-    backgroundColor: "#f6f6f6",
+    position: "relative",
+    backgroundColor: "#e8e8e8",
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#e8e8e8",
+    borderColor: "#d4cfcf",
     marginBottom: 8,
   },
   cameraIconBlock: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    position: "absolute",
     height: 60,
     width: 60,
     borderRadius: 60,
@@ -68,5 +106,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#BDBDBD",
+  },
+
+  camera: {
+    borderRadius: 7,
+    height: "100%",
+    width: "100%",
   },
 });
