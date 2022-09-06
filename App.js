@@ -5,7 +5,6 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 
 import AuthNavigation from "./shared/Components/AuthNavigation/AuthNavigation";
-import MainNavigation from "./shared/Components/MainNavigation/MainNavigation";
 import Home from "./Screens/Home";
 
 SplashScreen.preventAutoHideAsync();
