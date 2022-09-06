@@ -16,7 +16,7 @@ import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import Icon from "./Icon";
 
-const RegistrationScreen = ({ navigation }) => {
+const Registration = ({ navigation }) => {
   const secondInput = useRef();
   const thirdInput = useRef();
   const [isImageSet, setIsImageSet] = useState(false);
@@ -30,6 +30,7 @@ const RegistrationScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log(formState);
+    navigation.navigate('Home')
   };
 
   return (
@@ -37,7 +38,7 @@ const RegistrationScreen = ({ navigation }) => {
       <View style={styles.mainBlock}>
         <ImageBackground
           style={styles.backgroundImg}
-          source={require("../../assets/background.png")}
+          source={require("../../../assets/background.png")}
         />
         <KeyboardAvoidingView
           style={styles.form}
@@ -52,7 +53,7 @@ const RegistrationScreen = ({ navigation }) => {
               <>
                 <Image
                   style={{ height: "100%", width: "100%", borderRadius: 16 }}
-                  source={require("../../assets/myAvatar.jpg")}
+                  source={require("../../../assets/myAvatar.jpg")}
                 />
                 <Icon
                   style={{
@@ -157,7 +158,7 @@ const RegistrationScreen = ({ navigation }) => {
     </TouchableWithoutFeedback>
   );
 };
-export default RegistrationScreen;
+export default Registration;
 
 const styles = StyleSheet.create({
   mainBlock: {

@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 
-import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
-import LoginScreen from "./Screens/LoginScreen/LoginScreen";
-import { createStackNavigator } from "@react-navigation/stack";
+import AuthNavigation from "./shared/Components/AuthNavigation/AuthNavigation";
+import MainNavigation from "./shared/Components/MainNavigation/MainNavigation";
+import Home from "./Screens/Home";
 
 SplashScreen.preventAutoHideAsync();
 const App = () => {
   const [isReady, setIsReady] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
 
   useEffect(() => {
     const prepare = async () => {
@@ -48,28 +48,18 @@ const App = () => {
     return null;
   }
 
-  const MainStack = createStackNavigator();
-  return (
-    <NavigationContainer>
+  if (!isAuth) {
+    return (
       <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
-        <MainStack.Navigator initialRouteName="Sign Up">
-          <MainStack.Screen
-            name="Sign Up"
-            component={RegistrationScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <MainStack.Screen
-            name="Log In"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </MainStack.Navigator>
+        <AuthNavigation />
       </View>
-    </NavigationContainer>
+    );
+  }
+
+  return (
+    <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
+      <Home />
+    </View>
   );
 };
 

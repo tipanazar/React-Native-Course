@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-const LoginScreen = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const secondInput = useRef();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -24,6 +24,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log(formState);
+    navigation.navigate('Home')
   };
 
   return (
@@ -31,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.mainBlock}>
         <ImageBackground
           style={styles.backgroundImg}
-          source={require("../../assets/background.png")}
+          source={require("../../../assets/background.png")}
         />
         <KeyboardAvoidingView
           style={styles.form}
@@ -111,7 +112,7 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+export default Login;
 
 const styles = StyleSheet.create({
   mainBlock: {
