@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
 import { CameraIcon } from "../SvgComponents";
 
 const TakePhoto = ({ mainBlockStyle }) => {
+  const isFocused = useIsFocused();
+
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [img, setImg] = useState({ uri: "", id: "" });
@@ -38,7 +41,6 @@ const TakePhoto = ({ mainBlockStyle }) => {
       <TouchableOpacity
         style={styles.cameraBlock}
         onPress={async () => {
-          console.log("click!");
           if (cameraRef) {
             await getPic();
           }
@@ -50,13 +52,15 @@ const TakePhoto = ({ mainBlockStyle }) => {
       >
         {img.uri.length ? (
           <Image source={{ uri: img.uri }} style={styles.camera} />
-        ) : (
+        ) : isFocused ? (
           <Camera
             type="back"
             flashMode="auto"
             ref={(ref) => setCameraRef(ref)}
             style={styles.camera}
           />
+        ) : (
+          <></>
         )}
         <View
           style={{
@@ -91,6 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#d4cfcf",
     marginBottom: 8,
+    height: 260,
   },
   cameraIconBlock: {
     display: "flex",
@@ -114,3 +119,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
+
+// {"addListener": [Function addListener], "canGoBack": [Function canGoBack], "dispatch": [Function dispatch], "getId": [Function getId], "getParent": [Function getParent], "getState": [Function anonymous],
+// "goBack": [Function anonymous], "isFocused": [Function isFocused], "jumpTo": [Function anonymous], "navigate": [Function anonymous], "removeListener": [Function removeListener], "reset": [Function anonymous], "setOptions": [Function setOptions], "setParams": [Function anonymous]}

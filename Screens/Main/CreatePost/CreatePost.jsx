@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,31 +7,49 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import TakePhoto from "../../../shared/Components/TakePhoto";
 
 const CreatePost = () => {
-  console.log(Keyboard)
+  const isFocused = useIsFocused();
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+
+  useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      () => setIsKeyboardShown(true)
+    );
+    const keyboardHideListener = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => setIsKeyboardShown(false)
+    );
+    console.log(isKeyboardShown);
+
+    if (!isFocused) {
+      console.log("remove");
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    }
+  });
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.mainBlock}>
-        <HideWithKeyboard>
-          <TakePhoto mainBlockStyle={styles.takePhotoBlock} />
-        </HideWithKeyboard>
-        {/* <KeyboardAvoidingView
-          // style={styles.form}
-          behavior={Platform.OS == "ios" && "padding"}
-        > */}
-          <View style={styles.form}>
+        <TakePhoto
+          mainBlockStyle={{
+            ...styles.takePhotoBlock,
+            display: isKeyboardShown ? "none" : "flex",
+          }}
+        />
+        <View style={styles.form}>
           <TextInput style={styles.input} placeholder="Title..." />
           <TextInput
             style={{ ...styles.input, marginBottom: 32 }}
@@ -39,8 +58,7 @@ const CreatePost = () => {
           <TouchableOpacity style={styles.publishBtn} activeOpacity={0.6}>
             <Text style={{ fontSize: 16, color: "#fff" }}>Publish</Text>
           </TouchableOpacity>
-          </View>
-        {/* </KeyboardAvoidingView> */}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -57,8 +75,8 @@ const styles = StyleSheet.create({
   },
 
   takePhotoBlock: {
-    height: 260,
-    marginBottom: 48,
+    // height: 260,
+    marginBottom: 35,
   },
 
   input: {
@@ -80,4 +98,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6C00",
   },
 });
- 

@@ -54,6 +54,7 @@ const MainNavigation = () => {
           headerTitle: "Create Post",
           tabBarShowLabel: false,
           headerTitleAlign: "center",
+          freezeOnBlur: true,
           headerStyle: {
             height: 80,
           },
