@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import TakePhoto from "../../../shared/Components/TakePhoto";
 
 const CreatePost = () => {
   const isFocused = useIsFocused();
+  const secondInput = useRef()
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
 
   useEffect(() => {
@@ -31,10 +32,10 @@ const CreatePost = () => {
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
       () => setIsKeyboardShown(false)
     );
-    console.log(isKeyboardShown);
+    // console.log(isKeyboardShown);
 
     if (!isFocused) {
-      console.log("remove");
+      // console.log("remove");
       keyboardShowListener.remove();
       keyboardHideListener.remove();
     }
@@ -50,9 +51,16 @@ const CreatePost = () => {
           }}
         />
         <View style={styles.form}>
-          <TextInput style={styles.input} placeholder="Title..." />
+          <TextInput
+            style={styles.input}
+            returnKeyType="next"
+            onSubmitEditing={()=>secondInput.current.focus()}
+            placeholder="Title..."
+          />
           <TextInput
             style={{ ...styles.input, marginBottom: 32 }}
+            returnKeyType="done"
+            ref={secondInput}
             placeholder="Location..."
           />
           <TouchableOpacity style={styles.publishBtn} activeOpacity={0.6}>

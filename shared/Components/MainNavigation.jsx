@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -17,8 +18,19 @@ import {
 
 const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
+  const [isCreatePostScreenFocused, setIsCreatePostScreenFocused] =
+    useState(false);
+
   return (
-    <MainTabs.Navigator initialRouteName="PostsScreen" backBehavior="history">
+    <MainTabs.Navigator
+      initialRouteName="PostsScreen"
+      backBehavior="history"
+      screenOptions={{
+        tabBarStyle: {
+          display: isCreatePostScreenFocused ? "none" : "block",
+        },
+      }}
+    >
       <MainTabs.Screen
         name="PostsScreen"
         component={PostsScreen}
@@ -50,30 +62,36 @@ const MainNavigation = () => {
       <MainTabs.Screen
         name="CreatePost"
         component={CreatePost}
-        options={({ navigation }) => ({
-          headerTitle: "Create Post",
-          tabBarShowLabel: false,
-          headerTitleAlign: "center",
-          freezeOnBlur: true,
-          headerStyle: {
-            height: 80,
-          },
-          tabBarIcon: () => <CreatePostIcon />,
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "40%",
-              }}
-              onPress={() => navigation.goBack()}
-            >
-              <GoBackIcon />
-            </TouchableOpacity>
-          ),
-        })}
+        options={({ navigation }) => {
+          const currentFocusedScreen = navigation.isFocused();
+          if (currentFocusedScreen !== isCreatePostScreenFocused) {
+            setIsCreatePostScreenFocused(currentFocusedScreen);
+          }
+          return {
+            headerTitle: "Create Post",
+            tabBarShowLabel: false,
+            headerTitleAlign: "center",
+            freezeOnBlur: true,
+            headerStyle: {
+              height: 80,
+            },
+            tabBarIcon: () => <CreatePostIcon />,
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  width: "40%",
+                }}
+                onPress={() => navigation.goBack()}
+              >
+                <GoBackIcon />
+              </TouchableOpacity>
+            ),
+          };
+        }}
       />
       <MainTabs.Screen
         name="Profile"
