@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import PostsScreen from "../../Screens/Main/Posts/Posts";
@@ -18,19 +17,8 @@ import {
 
 const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
-  const [isCreatePostScreenFocused, setIsCreatePostScreenFocused] =
-    useState(false);
-
   return (
-    <MainTabs.Navigator
-      initialRouteName="PostsScreen"
-      backBehavior="history"
-      screenOptions={{
-        tabBarStyle: {
-          display: isCreatePostScreenFocused ? "none" : "block",
-        },
-      }}
-    >
+    <MainTabs.Navigator initialRouteName="PostsScreen" backBehavior="history">
       <MainTabs.Screen
         name="PostsScreen"
         component={PostsScreen}
@@ -63,10 +51,6 @@ const MainNavigation = () => {
         name="CreatePost"
         component={CreatePost}
         options={({ navigation }) => {
-          const currentFocusedScreen = navigation.isFocused();
-          if (currentFocusedScreen !== isCreatePostScreenFocused) {
-            setIsCreatePostScreenFocused(currentFocusedScreen);
-          }
           return {
             headerTitle: "Create Post",
             tabBarShowLabel: false,

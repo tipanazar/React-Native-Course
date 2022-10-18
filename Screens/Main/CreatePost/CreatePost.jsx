@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import * as Location from "expo-location";
 import {
   View,
   Text,
@@ -9,21 +11,27 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
-
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 
 import TakePhoto from "../../../shared/Components/TakePhoto";
+import MapPinIcon from "../../../shared/SvgComponents/MapPinIcon";
 
 const CreatePost = () => {
   const isFocused = useIsFocused();
-  const secondInput = useRef()
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [locationString, setLocationString] = useState({
+    text: "Press to find location",
+    isLocation: false,
+  });
 
   useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setLocationString("Permission to access location was denied");
+        return;
+      }
+    })();
+
     const keyboardShowListener = Keyboard.addListener(
       Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
       () => setIsKeyboardShown(true)
@@ -32,14 +40,27 @@ const CreatePost = () => {
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
       () => setIsKeyboardShown(false)
     );
-    // console.log(isKeyboardShown);
 
     if (!isFocused) {
-      // console.log("remove");
       keyboardShowListener.remove();
       keyboardHideListener.remove();
     }
   });
+
+  const setLocation = async () => {
+    if (locationString !== "Permission to access location was denied") {
+      setLocationString({ text: "Waiting...", isLocation: false });
+      let location = await Location.getCurrentPositionAsync({});
+      const parsedLocation = await Location.reverseGeocodeAsync({
+        longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+      });
+      setLocationString({
+        text: `${parsedLocation[0].street}, ${parsedLocation[0].city}, ${parsedLocation[0].country}`,
+        isLocation: true,
+      });
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -53,16 +74,31 @@ const CreatePost = () => {
         <View style={styles.form}>
           <TextInput
             style={styles.input}
-            returnKeyType="next"
-            onSubmitEditing={()=>secondInput.current.focus()}
+            returnKeyType="done"
             placeholder="Title..."
           />
-          <TextInput
-            style={{ ...styles.input, marginBottom: 32 }}
-            returnKeyType="done"
-            ref={secondInput}
-            placeholder="Location..."
-          />
+          <TouchableOpacity
+            style={{
+              ...styles.input,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 32,
+            }}
+            activeOpacity={0.5}
+            onPress={setLocation}
+          >
+            <MapPinIcon />
+            <Text
+              style={{
+                fontSize: 16,
+                color: locationString.isLocation ? "#212121" : "#BDBDBD",
+                marginLeft: 8,
+              }}
+            >
+              {locationString.text}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.publishBtn} activeOpacity={0.6}>
             <Text style={{ fontSize: 16, color: "#fff" }}>Publish</Text>
           </TouchableOpacity>
@@ -83,7 +119,6 @@ const styles = StyleSheet.create({
   },
 
   takePhotoBlock: {
-    // height: 260,
     marginBottom: 35,
   },
 
@@ -91,7 +126,6 @@ const styles = StyleSheet.create({
     height: 45,
     fontSize: 16,
     color: "#212121",
-    // padding: 15
     marginBottom: 23,
     borderBottomWidth: 1,
     borderBottomColor: "#E8E8E8",
