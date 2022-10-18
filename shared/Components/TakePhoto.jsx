@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#BDBDBD",
+    fontFamily: "RobotoRegular",
   },
 
   camera: {
@@ -119,6 +120,3 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
-
-// {"addListener": [Function addListener], "canGoBack": [Function canGoBack], "dispatch": [Function dispatch], "getId": [Function getId], "getParent": [Function getParent], "getState": [Function anonymous],
-// "goBack": [Function anonymous], "isFocused": [Function isFocused], "jumpTo": [Function anonymous], "navigate": [Function anonymous], "removeListener": [Function removeListener], "reset": [Function anonymous], "setOptions": [Function setOptions], "setParams": [Function anonymous]}

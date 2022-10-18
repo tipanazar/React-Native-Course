@@ -80,27 +80,24 @@ const CreatePost = () => {
           <TouchableOpacity
             style={{
               ...styles.input,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 32,
+              ...styles.locationBtn,
             }}
             activeOpacity={0.5}
             onPress={setLocation}
           >
             <MapPinIcon />
+
             <Text
               style={{
-                fontSize: 16,
+                ...styles.locationBtnText,
                 color: locationString.isLocation ? "#212121" : "#BDBDBD",
-                marginLeft: 8,
               }}
             >
               {locationString.text}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.publishBtn} activeOpacity={0.6}>
-            <Text style={{ fontSize: 16, color: "#fff" }}>Publish</Text>
+            <Text style={styles.publishBtnText}>Publish</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -129,6 +126,20 @@ const styles = StyleSheet.create({
     marginBottom: 23,
     borderBottomWidth: 1,
     borderBottomColor: "#E8E8E8",
+    fontFamily: "RobotoRegular",
+  },
+
+  locationBtn: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 32,
+  },
+
+  locationBtnText: {
+    fontSize: 16,
+    marginLeft: 8,
+    fontFamily: "RobotoRegular",
   },
 
   publishBtn: {
@@ -138,5 +149,11 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 100,
     backgroundColor: "#FF6C00",
+  },
+
+  publishBtnText: {
+    fontSize: 16,
+    color: "#fff",
+    fontFamily: "RobotoRegular",
   },
 });

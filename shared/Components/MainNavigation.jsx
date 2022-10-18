@@ -34,6 +34,9 @@ const MainNavigation = () => {
             height: 80,
             borderBottomWidth: 1,
           },
+          headerTitleStyle: {
+            fontFamily: "RobotoMedium",
+          },
           tabBarIcon: ({ focused }) =>
             focused ? <PostsIconFocused /> : <PostsIcon />,
           headerRight: () => (
@@ -64,6 +67,9 @@ const MainNavigation = () => {
             headerStyle: {
               height: 80,
               borderBottomWidth: 1,
+            },
+            headerTitleStyle: {
+              fontFamily: "RobotoMedium",
             },
             tabBarIcon: () => <CreatePostIcon />,
             headerLeft: () => (
