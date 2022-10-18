@@ -18,7 +18,11 @@ import {
 const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
   return (
-    <MainTabs.Navigator initialRouteName="PostsScreen" backBehavior="history">
+    <MainTabs.Navigator
+      initialRouteName="PostsScreen"
+      backBehavior="history"
+      screenOptions={{ tabBarStyle: { borderTopWidth: 1 } }}
+    >
       <MainTabs.Screen
         name="PostsScreen"
         component={PostsScreen}
@@ -28,6 +32,7 @@ const MainNavigation = () => {
           headerTitleAlign: "center",
           headerStyle: {
             height: 80,
+            borderBottomWidth: 1,
           },
           tabBarIcon: ({ focused }) =>
             focused ? <PostsIconFocused /> : <PostsIcon />,
@@ -58,6 +63,7 @@ const MainNavigation = () => {
             freezeOnBlur: true,
             headerStyle: {
               height: 80,
+              borderBottomWidth: 1,
             },
             tabBarIcon: () => <CreatePostIcon />,
             headerLeft: () => (
