@@ -1,28 +1,24 @@
 import { Text, View, Image, StyleSheet, FlatList } from "react-native";
 
-import * as Location from "expo-location";
-
 import POSTS_DB from "./posts.json";
 
 const Posts = () => {
   //
-  
-  const renderItem = async({ item }) => {
-    let locationString = "";
-    const location = await Location.reverseGeocodeAsync({
-      longitude: item.coords.longitude,
-      latitude: item.coords.latitude,
-    });
-    locationString = `${location.street}, ${location.city}, ${location.country}`;
 
-    console.log(locationString);
+  const renderItem = ({ item }) => {
     return (
-      <View>
-        <Image source={item.photoAddress} />
-        <Text>{item.postName}</Text>
-        <Text>{item.creationDate}</Text>
-        <Text>{item.comments.length}</Text>
-        {/* <Text>{`${location.street}, ${location.city}, ${location.country}`}</Text> */}
+      <View style={styles.postBlock}>
+        <Image
+          style={styles.postImage}
+          source={{
+            uri: item.photoAddress,
+          }}
+        />
+        <Text style={styles.postText}>{item.postName}</Text>
+        <Text style={styles.postText}>{item.creationDate}</Text>
+        <Text style={styles.postText}>{item.comments.length}</Text>
+        <Text style={styles.postText}>{item.likes}</Text>
+        <Text style={styles.postText}>{item.location.text}</Text>
       </View>
     );
   };
@@ -63,5 +59,11 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoRegular",
     fontSize: 13,
     color: "rgba(33, 33, 33, 0.8)",
+  },
+
+  postImage: {
+    height: 240,
+    borderRadius: 8,
+    width: "100%",
   },
 });

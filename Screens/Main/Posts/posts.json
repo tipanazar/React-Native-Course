@@ -2,13 +2,16 @@
   "Posts": [
     {
       "id": 0,
-      "photoAdress": "https://images2.alphacoders.com/941/941898.jpg",
+      "photoAddress": "https://images2.alphacoders.com/941/941898.jpg",
       "postName": "Windows XP background",
       "likes": 99999,
       "creationDate": 1666104417,
-      "coords": {
-        "longitude": -8.58082009421381,
-        "latitude": 40.32431957187002
+      "location": {
+        "coords": {
+          "longitude": -8.58082009421381,
+          "latitude": 40.32431957187002
+        },
+        "name": "some street, some city, some country"
       },
       "comments": [
         {
@@ -33,13 +36,16 @@
     },
     {
       "id": 1,
-      "photoAdress": "https://www.googleapis.com/download/storage/v1/b/sharable_images/o/0009ba5b-4926-447a-ab30-b9580f507636_background.png?generation=1646226018648368&alt=media",
+      "photoAddress": "https://images.pexels.com/photos/9955064/pexels-photo-9955064.jpeg",
       "postName": "Motherland, Kyiv",
       "likes": 21,
       "creationDate": 1666004417,
-      "coords": {
-        "longitude": 50.42649841,
-        "latitude": 30.56299973
+      "location": {
+        "coords": {
+          "latitude": 50.42649841,
+          "longitude": 30.56299973
+        },
+        "name": "Motherland, Kyiv, Ukraine"
       },
       "comments": [
         {
