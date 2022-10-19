@@ -7,6 +7,8 @@ import GoBackIcon from "./GoBackIcon";
 import LogoutIcon from "./LogoutIcon";
 import AddAvatarIcon from "./AddAvatarIcon";
 import CameraIcon from "./CameraIcon";
+import CommentIcon from "./CommentIcon";
+import LikeIcon from "./LikeIcon";
 
 export {
   PostsIcon,
@@ -18,4 +20,6 @@ export {
   LogoutIcon,
   AddAvatarIcon,
   CameraIcon,
+  CommentIcon,
+  LikeIcon,
 };

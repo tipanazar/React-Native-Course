@@ -5,7 +5,7 @@
       "photoAddress": "https://images2.alphacoders.com/941/941898.jpg",
       "postName": "Windows XP background",
       "likes": 99999,
-      "creationDate": 1666104417,
+      "creationDate": 1666104417000,
       "location": {
         "coords": {
           "longitude": -8.58082009421381,
@@ -16,19 +16,19 @@
       "comments": [
         {
           "sender": { "type": "somebody", "senderName": "NOT You!!" },
-          "creationDate": 1666124417,
+          "creationDate": 1666124417000,
           "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!"
         },
         {
           "sender": { "type": "you" },
-          "creationDate": 1666224417,
+          "creationDate": 1666224417000,
           "senderAvatar": "https://i.pinimg.com/736x/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.jpg",
           "text": "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images."
         },
         {
           "sender": { "type": "somebody", "senderName": "NOT You!!" },
-          "creationDate": 1666324417,
+          "creationDate": 1666324417000,
           "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Thank you! That was very helpful!"
         }
@@ -39,7 +39,7 @@
       "photoAddress": "https://images.pexels.com/photos/9955064/pexels-photo-9955064.jpeg",
       "postName": "Motherland, Kyiv",
       "likes": 21,
-      "creationDate": 1666004417,
+      "creationDate": 1666004410007,
       "location": {
         "coords": {
           "latitude": 50.42649841,
@@ -50,7 +50,7 @@
       "comments": [
         {
           "sender": { "type": "somebody", "senderName": "NOT You!!" },
-          "creationDate": 1666024417,
+          "creationDate": 1666024417000,
           "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Wow!!"
         }
