@@ -1,9 +1,7 @@
-import { Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const Map = ({ route }) => {
   const { location, title, description } = route.params;
-  console.log(location);
   return (
     <MapView
       style={{ height: "100%" }}

@@ -11,7 +11,7 @@ import dateParser from "../../shared/hooks/dateParser";
 import { CommentIcon, LikeIcon } from "../../shared/SvgComponents";
 import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
 
-import POSTS_DB from "./posts.json";
+import POSTS_DB from "../../shared/posts.json";
 
 const Home = ({ navigation }) => {
   const renderItem = ({ item }) => {
@@ -49,8 +49,10 @@ const Home = ({ navigation }) => {
               })
             }
           >
-            <CommentIcon style={{ marginRight: 3 }} />
-            <Text style={styles.postText}>{item.comments.length}</Text>
+            <CommentIcon style={{ marginRight: 0 }} />
+            <Text style={styles.postText}>
+              &nbsp;&#8210;&nbsp;{item.comments.length}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.postButton}
@@ -59,11 +61,11 @@ const Home = ({ navigation }) => {
               navigation.navigate("Map", {
                 location: item.location.coords,
                 title: item.postName,
-                description: item.location.name
+                description: item.location.name,
               })
             }
           >
-            <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
+            <MapPinIcon style={{ marginRight: 1 }} fill="#FF6C00" />
             <Text
               style={{
                 ...styles.postText,
@@ -82,8 +84,8 @@ const Home = ({ navigation }) => {
             marginBottom: 0,
           }}
         >
-          <LikeIcon style={{ marginRight: 3 }} />
-          <Text style={styles.postText}>{item.likes}</Text>
+          <LikeIcon />
+          <Text style={styles.postText}>&nbsp;&#8210;&nbsp;{item.likes}</Text>
         </View>
       </View>
     );
@@ -91,15 +93,15 @@ const Home = ({ navigation }) => {
 
   return (
     <FlatList
+      style={{
+        paddingHorizontal: 16,
+        backgroundColor: "white",
+      }}
       data={POSTS_DB.Posts.sort(
         (item1, item2) => item2.creationDate - item1.creationDate
       )}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      style={{
-        paddingHorizontal: 16,
-        backgroundColor: "white",
-      }}
       ListHeaderComponent={
         <View style={styles.userBlock}>
           <Image

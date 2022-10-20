@@ -2,8 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native";
 
 import Home from "../Nested/Home";
-import Comments from "../Nested/Comments";
-import Map from "../Nested/Map";
+import Comments from "../../shared/Components/Comments";
+import Map from "../../shared/Components/Map";
 import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
 
 const Nested = createStackNavigator();
@@ -19,7 +19,7 @@ const Posts = () => {
         },
         headerTitleStyle: {
           fontFamily: "RobotoMedium",
-          fontSize: 17
+          fontSize: 17,
         },
         headerTitleAlign: "center",
       }}
