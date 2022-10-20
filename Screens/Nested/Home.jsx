@@ -55,7 +55,13 @@ const Home = ({ navigation }) => {
           <TouchableOpacity
             style={styles.postButton}
             activeOpacity={0.6}
-            onPress={() => navigation.navigate("Map")}
+            onPress={() =>
+              navigation.navigate("Map", {
+                location: item.location.coords,
+                title: item.postName,
+                description: item.location.name
+              })
+            }
           >
             <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
             <Text
@@ -90,8 +96,6 @@ const Home = ({ navigation }) => {
       )}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      // extraData={selectedId}
-      // refreshing={true}
       style={{
         paddingHorizontal: 16,
         backgroundColor: "white",
