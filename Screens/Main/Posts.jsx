@@ -19,7 +19,9 @@ const Posts = () => {
         },
         headerTitleStyle: {
           fontFamily: "RobotoMedium",
+          fontSize: 17
         },
+        headerTitleAlign: "center",
       }}
     >
       <Nested.Screen

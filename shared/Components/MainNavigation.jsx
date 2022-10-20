@@ -31,6 +31,7 @@ const MainNavigation = () => {
         headerShown: false,
         headerTitleStyle: {
           fontFamily: "RobotoMedium",
+          fontSize: 17,
         },
       }}
     >

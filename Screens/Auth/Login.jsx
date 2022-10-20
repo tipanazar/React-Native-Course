@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log(formState);
-    navigation.navigate('Home')
+    navigation.navigate("Home");
   };
 
   return (
@@ -36,7 +36,7 @@ const Login = ({ navigation }) => {
         />
         <KeyboardAvoidingView
           style={styles.form}
-          behavior={Platform.OS == "ios" && "padding"}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <Text style={styles.formTitle}>Log In</Text>
           <TextInput
@@ -98,9 +98,7 @@ const Login = ({ navigation }) => {
             >
               <Text style={styles.btnText}>Log In</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Sign Up")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("Sign Up")}>
               <Text style={styles.signupLink}>
                 Haven't account yet? Sign Up
               </Text>

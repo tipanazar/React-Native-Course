@@ -42,7 +42,12 @@ const Home = ({ navigation }) => {
           <TouchableOpacity
             style={styles.postButton}
             activeOpacity={0.6}
-            onPress={() => navigation.navigate("Comments")}
+            onPress={() =>
+              navigation.navigate("Comments", {
+                imgAddress: item.photoAddress,
+                commentsArr: item.comments,
+              })
+            }
           >
             <CommentIcon style={{ marginRight: 3 }} />
             <Text style={styles.postText}>{item.comments.length}</Text>
@@ -80,7 +85,9 @@ const Home = ({ navigation }) => {
 
   return (
     <FlatList
-      data={POSTS_DB.Posts}
+      data={POSTS_DB.Posts.sort(
+        (item1, item2) => item2.creationDate - item1.creationDate
+      )}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       // extraData={selectedId}

@@ -15,21 +15,29 @@
       },
       "comments": [
         {
-          "sender": { "type": "somebody", "senderName": "NOT You!!" },
+          "sender": {
+            "type": "somebody",
+            "senderName": "NOT You!!",
+            "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png"
+          },
           "creationDate": 1666124417000,
-          "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!"
         },
         {
-          "sender": { "type": "you" },
-          "creationDate": 1666224417000,
-          "senderAvatar": "https://i.pinimg.com/736x/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.jpg",
+          "sender": {
+            "type": "you",
+            "senderAvatar": "https://i.pinimg.com/736x/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.jpg"
+          },
+          "creationDate": 1666314417000,
           "text": "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images."
         },
         {
-          "sender": { "type": "somebody", "senderName": "NOT You!!" },
+          "sender": {
+            "type": "somebody",
+            "senderName": "NOT You!!",
+            "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png"
+          },
           "creationDate": 1666324417000,
-          "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Thank you! That was very helpful!"
         }
       ]
@@ -49,9 +57,12 @@
       },
       "comments": [
         {
-          "sender": { "type": "somebody", "senderName": "NOT You!!" },
+          "sender": {
+            "type": "somebody",
+            "senderName": "NOT You!!",
+            "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png"
+          },
           "creationDate": 1666024417000,
-          "senderAvatar": "https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png",
           "text": "Wow!!"
         }
       ]
