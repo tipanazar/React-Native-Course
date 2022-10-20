@@ -7,18 +7,15 @@ import Profile from "../../Screens/Main/Profile";
 
 import {
   PostsIcon,
-  PostsIconFocused,
   CreatePostIcon,
   ProfileIcon,
+  PostsIconFocused,
   ProfileIconFocused,
   GoBackIcon,
-  LogoutIcon,
 } from "../SvgComponents";
 
 const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
-  // console.log(<Posts/>)
-
   return (
     <MainTabs.Navigator
       initialRouteName="PostsScreen"
@@ -32,6 +29,9 @@ const MainNavigation = () => {
         tabBarShowLabel: false,
         headerTitleAlign: "center",
         headerShown: false,
+        headerTitleStyle: {
+          fontFamily: "RobotoMedium",
+        },
       }}
     >
       <MainTabs.Screen
@@ -50,9 +50,6 @@ const MainNavigation = () => {
             headerTitle: "Create Post",
             freezeOnBlur: true,
             headerShown: true,
-            headerTitleStyle: {
-              fontFamily: "RobotoMedium",
-            },
             tabBarIcon: () => <CreatePostIcon />,
             headerLeft: () => (
               <TouchableOpacity

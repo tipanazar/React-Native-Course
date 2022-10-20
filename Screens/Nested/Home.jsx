@@ -1,4 +1,11 @@
-import { Text, View, Image, StyleSheet, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 
 import dateParser from "../../shared/hooks/dateParser";
 import { CommentIcon, LikeIcon } from "../../shared/SvgComponents";
@@ -6,7 +13,7 @@ import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
 
 import POSTS_DB from "./posts.json";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={{ marginBottom: 35 }}>
@@ -31,23 +38,31 @@ const Home = () => {
           </Text>
           <Text style={styles.postText}>{dateParser(item.creationDate)}</Text>
         </View>
-        <View
-          style={{ ...styles.postTextWrapper, justifyContent: "flex-start" }}
-        >
-          <CommentIcon style={{ marginRight: 3 }} />
-          <Text style={{ ...styles.postText, marginRight: "auto" }}>
-            {item.comments.length}
-          </Text>
-          <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
-          <Text
-            style={{
-              ...styles.postText,
-              textAlign: "right",
-              textDecorationLine: "underline",
-            }}
+        <View style={styles.postTextWrapper}>
+          <TouchableOpacity
+            style={styles.postButton}
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Comments")}
           >
-            {item.location.name}
-          </Text>
+            <CommentIcon style={{ marginRight: 3 }} />
+            <Text style={styles.postText}>{item.comments.length}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.postButton}
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate("Map")}
+          >
+            <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
+            <Text
+              style={{
+                ...styles.postText,
+                textAlign: "right",
+                textDecorationLine: "underline",
+              }}
+            >
+              {item.location.name}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -65,6 +80,11 @@ const Home = () => {
 
   return (
     <FlatList
+      data={POSTS_DB.Posts}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      // extraData={selectedId}
+      // refreshing={true}
       style={{
         paddingHorizontal: 16,
         backgroundColor: "white",
@@ -81,14 +101,10 @@ const Home = () => {
           </View>
         </View>
       }
-      data={POSTS_DB.Posts}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      // extraData={selectedId}
-      // refreshing={true}
     />
   );
 };
+
 export default Home;
 
 const styles = StyleSheet.create({
@@ -136,5 +152,10 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoRegular",
     fontSize: 16,
     color: "#403f3f",
+  },
+  postButton: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
