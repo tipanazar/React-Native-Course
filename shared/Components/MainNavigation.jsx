@@ -1,9 +1,9 @@
 import { TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import PostsScreen from "../../Screens/Main/Posts/Posts";
-import CreatePost from "../../Screens/Main/CreatePost/CreatePost";
-import Profile from "../../Screens/Main/Profile/Profile";
+import Posts from "../../Screens/Main/Posts";
+import CreatePost from "../../Screens/Main/CreatePost";
+import Profile from "../../Screens/Main/Profile";
 
 import {
   PostsIcon,
@@ -17,42 +17,29 @@ import {
 
 const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
+  // console.log(<Posts/>)
+
   return (
     <MainTabs.Navigator
       initialRouteName="PostsScreen"
       backBehavior="history"
-      screenOptions={{ tabBarStyle: { borderTopWidth: 1 } }}
+      screenOptions={{
+        tabBarStyle: { borderTopWidth: 1 },
+        headerStyle: {
+          height: 80,
+          borderBottomWidth: 1,
+        },
+        tabBarShowLabel: false,
+        headerTitleAlign: "center",
+        headerShown: false,
+      }}
     >
       <MainTabs.Screen
-        name="PostsScreen"
-        component={PostsScreen}
+        name="Posts"
+        component={Posts}
         options={{
-          headerTitle: "Posts",
-          tabBarShowLabel: false,
-          headerTitleAlign: "center",
-          headerStyle: {
-            height: 80,
-            borderBottomWidth: 1,
-          },
-          headerTitleStyle: {
-            fontFamily: "RobotoMedium",
-          },
           tabBarIcon: ({ focused }) =>
             focused ? <PostsIconFocused /> : <PostsIcon />,
-          headerRight: () => (
-            <TouchableOpacity
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "30%",
-              }}
-              onPress={() => console.log("logout")}
-            >
-              <LogoutIcon />
-            </TouchableOpacity>
-          ),
         }}
       />
       <MainTabs.Screen
@@ -61,13 +48,8 @@ const MainNavigation = () => {
         options={({ navigation }) => {
           return {
             headerTitle: "Create Post",
-            tabBarShowLabel: false,
-            headerTitleAlign: "center",
             freezeOnBlur: true,
-            headerStyle: {
-              height: 80,
-              borderBottomWidth: 1,
-            },
+            headerShown: true,
             headerTitleStyle: {
               fontFamily: "RobotoMedium",
             },
@@ -94,12 +76,6 @@ const MainNavigation = () => {
         component={Profile}
         options={{
           headerTitle: "Profile",
-          tabBarShowLabel: false,
-          headerTitleAlign: "center",
-          headerShown: false,
-          headerStyle: {
-            height: 80,
-          },
           tabBarIcon: ({ focused }) =>
             focused ? <ProfileIconFocused /> : <ProfileIcon />,
         }}

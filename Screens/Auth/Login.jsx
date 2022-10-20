@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import {
   View,
   Text,
-  Image,
   ImageBackground,
   StyleSheet,
   TextInput,
@@ -14,16 +13,11 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-import Icon from "../../../shared/SvgComponents/AddAvatarIcon";
-
-const Registration = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const secondInput = useRef();
-  const thirdInput = useRef();
-  const [isImageSet, setIsImageSet] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
   const [formState, setFormState] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -38,59 +32,17 @@ const Registration = ({ navigation }) => {
       <View style={styles.mainBlock}>
         <ImageBackground
           style={styles.backgroundImg}
-          source={require("../../../assets/background.png")}
+          source={require("../../assets/background.png")}
         />
         <KeyboardAvoidingView
           style={styles.form}
           behavior={Platform.OS == "ios" && "padding"}
         >
-          <TouchableOpacity
-            style={styles.userAvatarBlock}
-            activeOpacity={0.9}
-            onPress={() => setIsImageSet(!isImageSet)}
-          >
-            {isImageSet ? (
-              <>
-                <Image
-                  style={{ height: "100%", width: "100%", borderRadius: 16 }}
-                  source={require("../../../assets/myAvatar.jpg")}
-                />
-                <Icon
-                  style={{
-                    ...styles.userAvatarIcon,
-                    transform: [{ rotate: "45deg" }],
-                  }}
-                  fill="#BDBDBD"
-                />
-              </>
-            ) : (
-              <Icon style={styles.userAvatarIcon} />
-            )}
-          </TouchableOpacity>
-          <Text style={styles.formTitle}>Sign Up</Text>
+          <Text style={styles.formTitle}>Log In</Text>
           <TextInput
             style={{
               ...styles.input,
               borderColor: focusedInput === 0 ? "#FF6C00" : "#E8E8E8",
-            }}
-            autoComplete="username-new"
-            textContentType="username"
-            autoCapitalize="none"
-            returnKeyType="next"
-            placeholder="Username"
-            onSubmitEditing={() => secondInput.current.focus()}
-            blurOnSubmit={false}
-            onFocus={() => setFocusedInput(0)}
-            onChangeText={(text) =>
-              setFormState((prevState) => {
-                return { ...prevState, username: text };
-              })
-            }
-          />
-          <TextInput
-            style={{
-              ...styles.input,
-              borderColor: focusedInput === 1 ? "#FF6C00" : "#E8E8E8",
             }}
             autoComplete="email"
             textContentType="emailAddress"
@@ -98,31 +50,30 @@ const Registration = ({ navigation }) => {
             returnKeyType="next"
             keyboardType="email-address"
             placeholder="Your email address"
-            onSubmitEditing={() => thirdInput.current.focus()}
-            ref={secondInput}
             blurOnSubmit={false}
-            onFocus={() => setFocusedInput(1)}
+            onSubmitEditing={() => secondInput.current.focus()}
+            onFocus={() => setFocusedInput(0)}
             onChangeText={(text) =>
               setFormState((prevState) => {
                 return { ...prevState, email: text };
               })
             }
           />
-          <View style={{ ...styles.passwordBlock, marginBottom: 46 }}>
+          <View style={styles.passwordBlock}>
             <TextInput
               style={{
                 ...styles.input,
                 marginBottom: 0,
-                borderColor: focusedInput === 2 ? "#FF6C00" : "#E8E8E8",
+                borderColor: focusedInput === 1 ? "#FF6C00" : "#E8E8E8",
               }}
-              autocomplete="password-new"
-              textContentType="newPassword"
+              autocomplete="password"
+              textContentType="password"
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry={isPasswordHidden}
               placeholder="Password"
-              ref={thirdInput}
-              onFocus={() => setFocusedInput(2)}
+              ref={secondInput}
+              onFocus={() => setFocusedInput(1)}
               onChangeText={(text) =>
                 setFormState((prevState) => {
                   return { ...prevState, password: text };
@@ -141,15 +92,17 @@ const Registration = ({ navigation }) => {
           </View>
           <HideWithKeyboard>
             <TouchableOpacity
-              style={styles.signupBtn}
+              style={styles.loginBtn}
               activeOpacity={0.5}
               onPress={handleSubmit}
             >
-              <Text style={styles.signupText}>Sign Up</Text>
+              <Text style={styles.btnText}>Log In</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("Log In")}>
-              <Text style={styles.loginLink}>
-                Already have an account? Log In
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Sign Up")}
+            >
+              <Text style={styles.signupLink}>
+                Haven't account yet? Sign Up
               </Text>
             </TouchableOpacity>
           </HideWithKeyboard>
@@ -158,11 +111,11 @@ const Registration = ({ navigation }) => {
     </TouchableWithoutFeedback>
   );
 };
-export default Registration;
+
+export default Login;
 
 const styles = StyleSheet.create({
   mainBlock: {
-    fontFamily: "RobotoRegular",
     height: "100%",
   },
 
@@ -171,11 +124,11 @@ const styles = StyleSheet.create({
   },
 
   form: {
+    fontFamily: "RobotoRegular",
     backgroundColor: "white",
-    position: "relative",
     maxHeight: "87%",
     marginTop: "auto",
-    paddingTop: 92,
+    paddingTop: 32,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 16,
@@ -187,21 +140,6 @@ const styles = StyleSheet.create({
     marginBottom: 33,
     color: "#212121",
     textAlign: "center",
-  },
-  userAvatarBlock: {
-    position: "absolute",
-    top: 0,
-    left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -50 }],
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-  },
-  userAvatarIcon: {
-    position: "absolute",
-    right: -12,
-    bottom: 14,
   },
 
   input: {
@@ -218,6 +156,7 @@ const styles = StyleSheet.create({
   passwordBlock: {
     position: "relative",
     width: "100%",
+    marginBottom: 46,
   },
   showPasswordBtn: {
     position: "absolute",
@@ -234,7 +173,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 
-  signupBtn: {
+  loginBtn: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -243,13 +182,13 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: "#FF6C00",
   },
-  signupText: {
+  btnText: {
     color: "white",
     fontSize: 16,
     lineHeight: 19,
   },
 
-  loginLink: {
+  signupLink: {
     fontSize: 16,
     lineHeight: 19,
     textAlign: "center",

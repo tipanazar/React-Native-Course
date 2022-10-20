@@ -12,8 +12,8 @@ import {
   Platform,
 } from "react-native";
 
-import TakePhoto from "../../../shared/Components/TakePhoto";
-import MapPinIcon from "../../../shared/SvgComponents/MapPinIcon";
+import TakePhoto from "../../shared/Components/TakePhoto";
+import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
 
 const CreatePost = () => {
   const isFocused = useIsFocused();

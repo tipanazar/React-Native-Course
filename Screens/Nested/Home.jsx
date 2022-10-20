@@ -1,12 +1,12 @@
 import { Text, View, Image, StyleSheet, FlatList } from "react-native";
 
-import dateParser from "../../../shared/hooks/dateParser";
-import { CommentIcon, LikeIcon } from "../../../shared/SvgComponents";
-import MapPinIcon from "../../../shared/SvgComponents/MapPinIcon";
+import dateParser from "../../shared/hooks/dateParser";
+import { CommentIcon, LikeIcon } from "../../shared/SvgComponents";
+import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
 
 import POSTS_DB from "./posts.json";
 
-const Posts = () => {
+const Home = () => {
   const renderItem = ({ item }) => {
     return (
       <View style={{ marginBottom: 35 }}>
@@ -18,47 +18,47 @@ const Posts = () => {
             }}
           />
         </View>
-          <View style={styles.postTextWrapper}>
-            <Text
-              style={{
-                ...styles.postText,
-                marginRight: "auto",
-                fontFamily: "RobotoMedium",
-                color: "#212121",
-              }}
-            >
-              {item.postName}
-            </Text>
-            <Text style={styles.postText}>{dateParser(item.creationDate)}</Text>
-          </View>
-          <View
-            style={{ ...styles.postTextWrapper, justifyContent: "flex-start" }}
-          >
-            <CommentIcon style={{ marginRight: 3 }} />
-            <Text style={{ ...styles.postText, marginRight: "auto" }}>
-              {item.comments.length}
-            </Text>
-            <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
-            <Text
-              style={{
-                ...styles.postText,
-                textAlign: "right",
-                textDecorationLine: "underline",
-              }}
-            >
-              {item.location.name}
-            </Text>
-          </View>
-          <View
+        <View style={styles.postTextWrapper}>
+          <Text
             style={{
-              ...styles.postTextWrapper,
-              justifyContent: "flex-start",
-              marginBottom: 0,
+              ...styles.postText,
+              marginRight: "auto",
+              fontFamily: "RobotoMedium",
+              color: "#212121",
             }}
           >
-            <LikeIcon style={{ marginRight: 3 }} />
-            <Text style={styles.postText}>{item.likes}</Text>
-          </View>
+            {item.postName}
+          </Text>
+          <Text style={styles.postText}>{dateParser(item.creationDate)}</Text>
+        </View>
+        <View
+          style={{ ...styles.postTextWrapper, justifyContent: "flex-start" }}
+        >
+          <CommentIcon style={{ marginRight: 3 }} />
+          <Text style={{ ...styles.postText, marginRight: "auto" }}>
+            {item.comments.length}
+          </Text>
+          <MapPinIcon style={{ marginRight: 3 }} fill="#FF6C00" />
+          <Text
+            style={{
+              ...styles.postText,
+              textAlign: "right",
+              textDecorationLine: "underline",
+            }}
+          >
+            {item.location.name}
+          </Text>
+        </View>
+        <View
+          style={{
+            ...styles.postTextWrapper,
+            justifyContent: "flex-start",
+            marginBottom: 0,
+          }}
+        >
+          <LikeIcon style={{ marginRight: 3 }} />
+          <Text style={styles.postText}>{item.likes}</Text>
+        </View>
       </View>
     );
   };
@@ -73,7 +73,7 @@ const Posts = () => {
         <View style={styles.userBlock}>
           <Image
             style={styles.userAvatar}
-            source={require("../../../assets/myAvatar.jpg")}
+            source={require("../../assets/myAvatar.jpg")}
           />
           <View>
             <Text style={styles.userBlockLogin}>TopTester1337</Text>
@@ -86,10 +86,10 @@ const Posts = () => {
       keyExtractor={(item) => item.id}
       // extraData={selectedId}
       // refreshing={true}
-    ></FlatList>
+    />
   );
 };
-export default Posts;
+export default Home;
 
 const styles = StyleSheet.create({
   userBlock: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 11,
-    paddingHorizontal: 3
+    paddingHorizontal: 3,
   },
   postText: {
     fontFamily: "RobotoRegular",

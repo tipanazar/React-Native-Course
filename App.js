@@ -6,7 +6,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 
 import AuthNavigation from "./shared/Components/AuthNavigation";
-import Home from "./Screens/Home";
+import MainNavigation from "./shared/Components/MainNavigation";
 
 SplashScreen.preventAutoHideAsync();
 const App = () => {
@@ -52,7 +52,7 @@ const App = () => {
   return (
     <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
       <NavigationContainer>
-        {isAuth ? <Home /> : <AuthNavigation />}
+        {isAuth ? <MainNavigation /> : <AuthNavigation />}
       </NavigationContainer>
     </View>
   );
