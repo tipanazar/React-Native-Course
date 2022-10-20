@@ -1,4 +1,5 @@
 import { Text, View, Image, StyleSheet, FlatList } from "react-native";
+
 import dateParser from "../../../shared/hooks/dateParser";
 import { CommentIcon, LikeIcon } from "../../../shared/SvgComponents";
 import MapPinIcon from "../../../shared/SvgComponents/MapPinIcon";
@@ -6,18 +7,17 @@ import MapPinIcon from "../../../shared/SvgComponents/MapPinIcon";
 import POSTS_DB from "./posts.json";
 
 const Posts = () => {
-  //
-
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.postBlock}>
-        <Image
-          style={styles.postImage}
-          source={{
-            uri: item.photoAddress,
-          }}
-        />
-        <View style={styles.postTextBlock}>
+      <View style={{ marginBottom: 35 }}>
+        <View style={styles.imageWrapper}>
+          <Image
+            style={styles.postImage}
+            source={{
+              uri: item.photoAddress,
+            }}
+          />
+        </View>
           <View style={styles.postTextWrapper}>
             <Text
               style={{
@@ -29,8 +29,7 @@ const Posts = () => {
             >
               {item.postName}
             </Text>
-            <Text style={styles.postText}>{dateParser(item.creationDate).split(", ")[0]}</Text>
-            {/* <Text style={styles.postText}>29.08.2011</Text> */}
+            <Text style={styles.postText}>{dateParser(item.creationDate)}</Text>
           </View>
           <View
             style={{ ...styles.postTextWrapper, justifyContent: "flex-start" }}
@@ -60,14 +59,16 @@ const Posts = () => {
             <LikeIcon style={{ marginRight: 3 }} />
             <Text style={styles.postText}>{item.likes}</Text>
           </View>
-        </View>
       </View>
     );
   };
 
   return (
     <FlatList
-      style={{ paddingVertical: 25, paddingHorizontal: 16 }}
+      style={{
+        paddingHorizontal: 16,
+        backgroundColor: "white",
+      }}
       ListHeaderComponent={
         <View style={styles.userBlock}>
           <Image
@@ -91,7 +92,12 @@ const Posts = () => {
 export default Posts;
 
 const styles = StyleSheet.create({
-  userBlock: { display: "flex", flexDirection: "row", alignItems: "center", marginBottom: 32 },
+  userBlock: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 32,
+  },
   userAvatar: { height: 80, width: 80, borderRadius: 16, marginRight: 8 },
   userBlockLogin: {
     marginBottom: 2,
@@ -104,18 +110,17 @@ const styles = StyleSheet.create({
     color: "rgba(33, 33, 33, 0.8)",
   },
 
-  postBlock: {
-    // backgroundColor: "red",
-    marginBottom: 35,
+  imageWrapper: {
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: "rgb(34, 60, 80)",
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   postImage: {
     height: 240,
     width: "100%",
     borderRadius: 8,
     marginBottom: 8,
-  },
-  postTextBlock: {
-    paddingHorizontal: 3,
   },
   postTextWrapper: {
     display: "flex",
@@ -125,6 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 11,
+    paddingHorizontal: 3
   },
   postText: {
     fontFamily: "RobotoRegular",
