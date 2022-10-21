@@ -18,7 +18,7 @@ const MainTabs = createBottomTabNavigator();
 const MainNavigation = () => {
   return (
     <MainTabs.Navigator
-      initialRouteName="PostsScreen"
+      initialRouteName="PostsScreen" 
       backBehavior="history"
       screenOptions={{
         tabBarStyle: { borderTopWidth: 1 },

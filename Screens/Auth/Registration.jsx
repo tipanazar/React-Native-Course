@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    transform: [{ translateX: -60 }, { translateY: -60 }],
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",

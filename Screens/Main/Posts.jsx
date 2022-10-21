@@ -6,10 +6,10 @@ import Comments from "../../shared/Components/Comments";
 import Map from "../../shared/Components/Map";
 import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
 
-const Nested = createStackNavigator();
+const PostsScreen = createStackNavigator();
 const Posts = () => {
   return (
-    <Nested.Navigator
+    <PostsScreen.Navigator
       initialRouteName="Home"
       backBehavior="history"
       screenOptions={{
@@ -24,7 +24,7 @@ const Posts = () => {
         headerTitleAlign: "center",
       }}
     >
-      <Nested.Screen
+      <PostsScreen.Screen
         name="Home"
         component={Home}
         options={{
@@ -45,7 +45,7 @@ const Posts = () => {
           ),
         }}
       />
-      <Nested.Screen
+      <PostsScreen.Screen
         name="Comments"
         component={Comments}
         options={({ navigation }) => ({
@@ -65,7 +65,7 @@ const Posts = () => {
           ),
         })}
       />
-      <Nested.Screen
+      <PostsScreen.Screen
         name="Map"
         component={Map}
         options={({ navigation }) => ({
@@ -85,7 +85,7 @@ const Posts = () => {
           ),
         })}
       />
-    </Nested.Navigator>
+    </PostsScreen.Navigator>
   );
 };
 

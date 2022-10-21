@@ -10,6 +10,7 @@ import CameraIcon from "./CameraIcon";
 import CommentIcon from "./CommentIcon";
 import LikeIcon from "./LikeIcon";
 import ArrowUp from "./ArrowUp";
+import MapPinIcon from "./MapPinIcon";
 
 export {
   PostsIcon,
@@ -23,5 +24,6 @@ export {
   CameraIcon,
   CommentIcon,
   LikeIcon,
-  ArrowUp
+  ArrowUp,
+  MapPinIcon,
 };
