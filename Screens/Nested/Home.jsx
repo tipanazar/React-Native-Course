@@ -1,6 +1,8 @@
 import { Text, View, Image, StyleSheet } from "react-native";
 
-import POSTS_DB from "../../shared/posts.json";
+// import POSTS_DB from "../../shared/posts.json";
+const POSTS_DB = {Posts: []}
+
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 
 const Home = ({ navigation }) => {

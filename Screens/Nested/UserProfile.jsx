@@ -6,6 +6,8 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Dimensions,
+  Platform,
 } from "react-native";
 
 import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
@@ -25,7 +27,20 @@ const Profile = ({ navigation }) => {
         postsArr={POSTS_DB.Posts}
         navigation={navigation}
         listHeaderComponent={
-          <View style={styles.listHeaderBlock}>
+          <View
+            style={
+              POSTS_DB.Posts.length
+                ? { ...styles.listHeaderBlock }
+                : {
+                    ...styles.listHeaderBlock,
+                    height:
+                      Platform.OS === "ios"
+                        ? Dimensions.get("window").height - 79 - 500
+                        : Dimensions.get("window").height - 49 - 500,
+                    marginTop: 500,
+                  }
+            }
+          >
             <TouchableOpacity
               style={styles.userAvatarBlock}
               activeOpacity={0.8}

@@ -96,9 +96,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
 
   return (
     <FlatList
-      style={{
-        height: "100%",
-      }}
+      height="100%"
       data={postsArr.sort(
         (item1, item2) => item2.creationDate - item1.creationDate
       )}
