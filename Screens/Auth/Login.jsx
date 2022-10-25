@@ -28,7 +28,12 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+        setFocusedInput(null);
+      }}
+    >
       <View style={styles.mainBlock}>
         <ImageBackground
           style={styles.backgroundImg}

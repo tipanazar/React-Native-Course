@@ -11,30 +11,87 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Alert,
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
+import { useDispatch } from "react-redux";
+
+import { registerUser } from "../../redux/auth/authOperations";
 
 import Icon from "../../shared/SvgComponents/AddAvatarIcon";
 
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Registration = ({ navigation }) => {
-  const secondInput = useRef();
-  const thirdInput = useRef();
+  const dispatch = useDispatch();
+  const usernameInput = useRef();
+  const emailInput = useRef();
+  const passwordInput = useRef();
   const [isImageSet, setIsImageSet] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
-  const [formState, setFormState] = useState({
+  const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
 
   const handleSubmit = () => {
-    console.log(formState);
-    navigation.navigate("Home");
+    const { username, email, password } = formData;
+    if (!username.length) {
+      return Alert.alert(
+        "Invalid Username!",
+        "The username should not be empty.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              usernameInput.current.focus();
+            },
+          },
+        ]
+      );
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      return Alert.alert("Wrong Email!", "Use valid email and try again.", [
+        {
+          text: "OK",
+          onPress: () => {
+            emailInput.current.focus();
+          },
+        },
+      ]);
+    }
+    if (password.length < 6) {
+      return Alert.alert(
+        "Invalid Password!",
+        "Password must contains at least 6 characters.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              passwordInput.current.focus();
+            },
+          },
+        ]
+      );
+    }
+    // console.log(formState);
+    // navigation.navigate("Home");
+    const userData = {
+      email: "test@mail.com",
+      password: "123456",
+      username: "testdrive jiest'",
+    };
+    // dispatch(registerUser(userData));
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+        setFocusedInput(null);
+      }}
+    >
       <View style={styles.mainBlock}>
         <ImageBackground
           style={styles.backgroundImg}
@@ -42,7 +99,8 @@ const Registration = ({ navigation }) => {
         />
         <KeyboardAvoidingView
           style={styles.form}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" ? "padding" : ""}
+          // behavior="padding"
         >
           <TouchableOpacity
             style={styles.userAvatarBlock}
@@ -78,11 +136,12 @@ const Registration = ({ navigation }) => {
             autoCapitalize="none"
             returnKeyType="next"
             placeholder="Username"
-            onSubmitEditing={() => secondInput.current.focus()}
+            onSubmitEditing={() => emailInput.current.focus()}
             blurOnSubmit={false}
+            ref={usernameInput}
             onFocus={() => setFocusedInput(0)}
             onChangeText={(text) =>
-              setFormState((prevState) => {
+              setFormData((prevState) => {
                 return { ...prevState, username: text };
               })
             }
@@ -98,12 +157,12 @@ const Registration = ({ navigation }) => {
             returnKeyType="next"
             keyboardType="email-address"
             placeholder="Your email address"
-            onSubmitEditing={() => thirdInput.current.focus()}
-            ref={secondInput}
+            onSubmitEditing={() => passwordInput.current.focus()}
+            ref={emailInput}
             blurOnSubmit={false}
             onFocus={() => setFocusedInput(1)}
             onChangeText={(text) =>
-              setFormState((prevState) => {
+              setFormData((prevState) => {
                 return { ...prevState, email: text };
               })
             }
@@ -121,10 +180,10 @@ const Registration = ({ navigation }) => {
               autoCorrect={false}
               secureTextEntry={isPasswordHidden}
               placeholder="Password"
-              ref={thirdInput}
+              ref={passwordInput}
               onFocus={() => setFocusedInput(2)}
               onChangeText={(text) =>
-                setFormState((prevState) => {
+                setFormData((prevState) => {
                   return { ...prevState, password: text };
                 })
               }
@@ -192,7 +251,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: "50%",
-    transform: [{ translateX: -60 }, { translateY: -60 }],
+    transform: [{ translateX: -45 }, { translateY: -60 }],
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",
