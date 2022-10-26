@@ -7,7 +7,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { store } from "./redux/store";
 
-import Routes from "./Routes";
+import Main from "./Main";
 
 SplashScreen.preventAutoHideAsync();
 const App = () => {
@@ -53,7 +53,7 @@ const App = () => {
     <Provider store={store}>
       <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
         <NavigationContainer>
-          <Routes />
+          <Main />
         </NavigationContainer>
       </View>
     </Provider>

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { registerUser, loginUser } from "./userOperations";
+import { registerUser, loginUser, getCurrentUser } from "./userOperations";
 
 const initialState = {
   error: null,
@@ -15,6 +15,7 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
+  // reducers:{getCurrentUser:},
   extraReducers: {
     [registerUser.pending]: (state) => {
       state.isLoading = true;
@@ -50,6 +51,12 @@ const userSlice = createSlice({
         ? (state.error = "Wrong password!")
         : (state.error = payload);
       state.isLoading = false;
+    },
+
+    [getCurrentUser.fulfilled]: (state, { payload }) => {
+      console.log(payload)
+      state.user.userId = payload.userId;
+      state.user.username = payload.username;
     },
   },
 });

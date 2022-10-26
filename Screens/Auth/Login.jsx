@@ -15,14 +15,14 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-import { getGlobalState } from "../../redux/selectors";
+import { getUserState } from "../../redux/selectors";
+import { loginUser } from "../../redux/user/userOperations";
 
 import Loader from "../../shared/Components/Loader";
-import { loginUser } from "../../redux/user/userOperations";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Login = ({ navigation }) => {
-  const { isLoading, error } = useSelector(getGlobalState);
+  const { isLoading, error } = useSelector(getUserState);
   const dispatch = useDispatch();
   const emailInput = useRef();
   const passwordInput = useRef();

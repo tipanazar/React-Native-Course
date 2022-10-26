@@ -17,14 +17,14 @@ import {
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import { registerUser } from "../../redux/user/userOperations";
-import { getGlobalState } from "../../redux/selectors";
+import {  getUserState } from "../../redux/selectors";
 
 import Icon from "../../shared/SvgComponents/AddAvatarIcon";
 import Loader from "../../shared/Components/Loader";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Registration = ({ navigation }) => {
-  const { isLoading, error } = useSelector(getGlobalState);
+  const { isLoading, error } = useSelector(getUserState);
   const dispatch = useDispatch();
   const usernameInput = useRef();
   const emailInput = useRef();

@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 export const registerUser = createAsyncThunk(
@@ -25,14 +26,14 @@ export const registerUser = createAsyncThunk(
         userId: newUser.user.uid,
         username: newUser.user.displayName,
       };
-      // console.log(result);
       return result;
     } catch (err) {
-      console.log(err);
       return rejectWithValue(err.toString());
     }
   }
 );
+
+// console.log("AUTH: ", auth.currentUser);
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
@@ -52,6 +53,17 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
+export const getCurrentUser = createAsyncThunk("user/onAuthStateChange", () => {
+  let userState = { userId: null, username: null };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      userState.userId = user.uid;
+      userState.username = user.displayName;
+    }
+  });
+  return userState;
+});
 
 const RESPONSE = {
   _tokenResponse: {
