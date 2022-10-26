@@ -1,19 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
+import { Provider } from "react-redux";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import {store} from './redux/store'
+import { store } from "./redux/store";
 
-import AuthNavigation from "./shared/Components/AuthNavigation";
-import MainNavigation from "./shared/Components/MainNavigation";
-import { Provider } from "react-redux";
+import Routes from "./Routes";
 
 SplashScreen.preventAutoHideAsync();
 const App = () => {
   const [isReady, setIsReady] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     const prepare = async () => {
@@ -52,13 +50,13 @@ const App = () => {
   }
 
   return (
-    <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
-      <Provider store={store}>
-      <NavigationContainer>
-        {isAuth ? <MainNavigation /> : <AuthNavigation />}
-      </NavigationContainer>
-      </Provider>
-    </View>
+    <Provider store={store}>
+      <View onLayout={onLayoutRootView} style={{ height: "100%" }}>
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 };
 

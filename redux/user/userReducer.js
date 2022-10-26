@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { registerUser, loginUser } from "./authOperations";
+import { registerUser, loginUser } from "./userOperations";
 
 const initialState = {
   error: null,
@@ -12,10 +12,8 @@ const initialState = {
   },
 };
 
-// console.log(initialState.error);
-
-const authSlice = createSlice({
-  name: "auth",
+const userSlice = createSlice({
+  name: "user",
   initialState,
   extraReducers: {
     [registerUser.pending]: (state) => {
@@ -27,12 +25,11 @@ const authSlice = createSlice({
         userId: payload.userId,
         username: payload.username || null,
       };
-      console.log(state.user)
       state.isLoading = false;
     },
     [registerUser.rejected]: (state, { payload }) => {
       payload === "FirebaseError: Firebase: Error (auth/email-already-in-use)."
-        ? (state.error = "Email already in use!")
+        ? (state.error = "Email is already in use!")
         : (state.error = payload);
       state.isLoading = false;
     },
@@ -42,14 +39,19 @@ const authSlice = createSlice({
       state.error = null;
     },
     [loginUser.fulfilled]: (state, { payload }) => {
-      console.log("Пришло: ", payload);
+      state.user = {
+        userId: payload.userId,
+        username: payload.username || null,
+      };
       state.isLoading = false;
     },
     [loginUser.rejected]: (state, { payload }) => {
-      console.log("Ошибка: ", payload);
+      payload === "FirebaseError: Firebase: Error (auth/wrong-password)."
+        ? (state.error = "Wrong password!")
+        : (state.error = payload);
       state.isLoading = false;
     },
   },
 });
 
-export default authSlice.reducer;
+export default userSlice.reducer;

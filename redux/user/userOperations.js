@@ -9,13 +9,12 @@ import {
 } from "firebase/auth";
 
 export const registerUser = createAsyncThunk(
-  "auth/registerUser",
+  "user/registerUser",
   async ({ email, password, username }, { rejectWithValue }) => {
     try {
       if (!email || !password || !username) {
         return rejectWithValue("All fields are required!");
       }
-      // console.log(auth.currentUser);
       const newUser = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -26,7 +25,7 @@ export const registerUser = createAsyncThunk(
         userId: newUser.user.uid,
         username: newUser.user.displayName,
       };
-      // console.log(newUser.user);
+      // console.log(result);
       return result;
     } catch (err) {
       console.log(err);
@@ -36,16 +35,20 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  "auth/loginUser",
+  "user/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Result: ", result);
+      if (!email || !password) {
+        return rejectWithValue("All fields are required!");
+      }
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      const result = {
+        userId: response.user.uid,
+        username: response.user.displayName,
+      };
       return result;
     } catch (err) {
-      console.log(err);
-      return "";
-      //   return rejectWithValue(err);
+      return rejectWithValue(err.toString());
     }
   }
 );

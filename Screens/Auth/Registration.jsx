@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -14,14 +15,16 @@ import {
   Alert,
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
-import { useDispatch } from "react-redux";
 
-import { registerUser } from "../../redux/auth/authOperations";
+import { registerUser } from "../../redux/user/userOperations";
+import { getGlobalState } from "../../redux/selectors";
 
 import Icon from "../../shared/SvgComponents/AddAvatarIcon";
+import Loader from "../../shared/Components/Loader";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Registration = ({ navigation }) => {
+  const { isLoading, error } = useSelector(getGlobalState);
   const dispatch = useDispatch();
   const usernameInput = useRef();
   const emailInput = useRef();
@@ -34,6 +37,19 @@ const Registration = ({ navigation }) => {
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => {
+            passwordInput.current.focus();
+          },
+        },
+      ]);
+    }
+  }, [error]);
 
   const handleSubmit = () => {
     const { username, email, password } = formData;
@@ -52,7 +68,7 @@ const Registration = ({ navigation }) => {
       );
     }
     if (!EMAIL_REGEX.test(email)) {
-      return Alert.alert("Wrong Email!", "Use valid email and try again.", [
+      return Alert.alert("Invalid Email!", "Use valid email and try again.", [
         {
           text: "OK",
           onPress: () => {
@@ -75,14 +91,8 @@ const Registration = ({ navigation }) => {
         ]
       );
     }
-    // console.log(formState);
-    // navigation.navigate("Home");
-    const userData = {
-      email: "test@mail.com",
-      password: "123456",
-      username: "testdrive jiest'",
-    };
-    // dispatch(registerUser(userData));
+
+    dispatch(registerUser(formData));
   };
 
   return (
@@ -93,6 +103,16 @@ const Registration = ({ navigation }) => {
       }}
     >
       <View style={styles.mainBlock}>
+        {isLoading && <Loader />}
+        {/* {error &&
+          Alert.alert("Something went wrong...", error, [
+            {
+              text: "OK",
+              onPress: () => {
+                passwordInput.current.focus();
+              },
+            },
+          ])} */}
         <ImageBackground
           style={styles.backgroundImg}
           source={require("../../assets/background.png")}
@@ -217,6 +237,7 @@ const Registration = ({ navigation }) => {
     </TouchableWithoutFeedback>
   );
 };
+
 export default Registration;
 
 const styles = StyleSheet.create({

@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -10,21 +11,68 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Alert,
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
+import { getGlobalState } from "../../redux/selectors";
+
+import Loader from "../../shared/Components/Loader";
+import { loginUser } from "../../redux/user/userOperations";
+
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Login = ({ navigation }) => {
-  const secondInput = useRef();
+  const { isLoading, error } = useSelector(getGlobalState);
+  const dispatch = useDispatch();
+  const emailInput = useRef();
+  const passwordInput = useRef();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
-  const [formState, setFormState] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => {
+            passwordInput.current.focus();
+          },
+        },
+      ]);
+    }
+  }, [error]);
+
   const handleSubmit = () => {
-    console.log(formState);
-    navigation.navigate("Home");
+    const { email, password } = formData;
+    if (!EMAIL_REGEX.test(email)) {
+      return Alert.alert("Invalid Email!", "Use valid email and try again.", [
+        {
+          text: "OK",
+          onPress: () => {
+            emailInput.current.focus();
+          },
+        },
+      ]);
+    }
+    if (password.length < 6) {
+      return Alert.alert(
+        "Invalid Password!",
+        "Password must contains at least 6 characters.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              passwordInput.current.focus();
+            },
+          },
+        ]
+      );
+    }
+    dispatch(loginUser(formData));
   };
 
   return (
@@ -35,13 +83,14 @@ const Login = ({ navigation }) => {
       }}
     >
       <View style={styles.mainBlock}>
+        {isLoading && <Loader />}
         <ImageBackground
           style={styles.backgroundImg}
           source={require("../../assets/background.png")}
         />
         <KeyboardAvoidingView
           style={styles.form}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" && "padding"}
         >
           <Text style={styles.formTitle}>Log In</Text>
           <TextInput
@@ -56,10 +105,11 @@ const Login = ({ navigation }) => {
             keyboardType="email-address"
             placeholder="Your email address"
             blurOnSubmit={false}
-            onSubmitEditing={() => secondInput.current.focus()}
+            onSubmitEditing={() => passwordInput.current.focus()}
             onFocus={() => setFocusedInput(0)}
+            ref={emailInput}
             onChangeText={(text) =>
-              setFormState((prevState) => {
+              setFormData((prevState) => {
                 return { ...prevState, email: text };
               })
             }
@@ -77,10 +127,10 @@ const Login = ({ navigation }) => {
               autoCorrect={false}
               secureTextEntry={isPasswordHidden}
               placeholder="Password"
-              ref={secondInput}
+              ref={passwordInput}
               onFocus={() => setFocusedInput(1)}
               onChangeText={(text) =>
-                setFormState((prevState) => {
+                setFormData((prevState) => {
                   return { ...prevState, password: text };
                 })
               }
