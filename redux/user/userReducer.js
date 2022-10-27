@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { registerUser, loginUser, getCurrentUser } from "./userOperations";
+import { registerUser, loginUser, logoutUser } from "./userOperations";
 
 const initialState = {
   error: null,
@@ -12,10 +12,21 @@ const initialState = {
   },
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
-  // reducers:{getCurrentUser:},
+  reducers: {
+    getCurrentUser: (state, { payload }) => {
+      state.user = {
+        userId: payload.userId,
+        username: payload.username || null,
+        userEmail: payload.userEmail,
+      };
+    },
+    resetError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: {
     [registerUser.pending]: (state) => {
       state.isLoading = true;
@@ -50,17 +61,28 @@ const userSlice = createSlice({
     },
     [loginUser.rejected]: (state, { payload }) => {
       payload === "FirebaseError: Firebase: Error (auth/wrong-password)."
-        ? (state.error = "Wrong password!")
+        ? (state.error = "Wrong Password!")
+        : payload === "FirebaseError: Firebase: Error (auth/user-not-found)."
+        ? (state.error = "Wrong Email!")
         : (state.error = payload);
       state.isLoading = false;
     },
 
-    [getCurrentUser.fulfilled]: (state, { payload }) => {
+    [logoutUser.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [logoutUser.fulfilled]: (state, { payload }) => {
       state.user = {
-        userId: payload.userId,
-        username: payload.username || null,
-        userEmail: payload.userEmail,
+        userId: null,
+        username: null,
+        userEmail: null,
       };
+      state.isLoading = false;
+    },
+    [logoutUser.rejected]: (state, { payload }) => {
+      state.error = payload;
+      state.isLoading = false;
     },
   },
 });

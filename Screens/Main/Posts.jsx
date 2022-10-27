@@ -1,6 +1,8 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { createStackNavigator } from "@react-navigation/stack";
 
+import { logoutUser } from "../../redux/user/userOperations";
 import Home from "../Nested/Home";
 import Comments from "../../shared/Components/Comments";
 import Map from "../../shared/Components/Map";
@@ -8,6 +10,7 @@ import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
 
 const PostsScreen = createStackNavigator();
 const Posts = () => {
+  const dispatch = useDispatch();
   return (
     <PostsScreen.Navigator
       initialRouteName="Home"
@@ -38,7 +41,7 @@ const Posts = () => {
                 height: "100%",
                 width: "30%",
               }}
-              onPress={() => console.log("logout")}
+              onPress={() => dispatch(logoutUser())}
             >
               <LogoutIcon />
             </TouchableOpacity>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -8,18 +9,34 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Alert,
 } from "react-native";
 
-import { useSelector } from "react-redux";
-import { getUserState } from "../../redux/selectors";
+import { resetErrorAction } from "../../redux/user/userActions";
+import { logoutUser } from "../../redux/user/userOperations";
+import { getPrimaryUserState, getUserState } from "../../redux/selectors";
 
-import POSTS_DB from "../../shared/posts.json";
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
+// const POSTS_DB = { Posts: [] };
+import POSTS_DB from "../../shared/posts.json";
 
 const Profile = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { error } = useSelector(getPrimaryUserState);
   const { username } = useSelector(getUserState);
   const [isImageSet, setIsImageSet] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => dispatch(resetErrorAction()),
+        },
+      ]);
+    }
+  }, [error]);
 
   return (
     <ImageBackground
@@ -74,7 +91,7 @@ const Profile = ({ navigation }) => {
             <TouchableOpacity
               style={styles.logoutBtn}
               activeOpacity={0.5}
-              onPress={() => console.log("logout")}
+              onPress={() => dispatch(logoutUser())}
             >
               <LogoutIcon />
             </TouchableOpacity>
@@ -96,7 +113,7 @@ const styles = StyleSheet.create({
   listHeaderBlock: {
     marginTop: 250,
     backgroundColor: "white",
-    height: 160,
+    paddingBottom: 33,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -131,6 +148,7 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoMedium",
     textAlign: "center",
     fontSize: 30,
+    paddingHorizontal: 16,
   },
 
   imageWrapper: {

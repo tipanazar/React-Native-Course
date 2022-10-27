@@ -16,16 +16,17 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
+import { resetErrorAction } from "../../redux/user/userActions";
 import { registerUser } from "../../redux/user/userOperations";
-import {  getUserState } from "../../redux/selectors";
+import { getPrimaryUserState } from "../../redux/selectors";
 
 import Icon from "../../shared/SvgComponents/AddAvatarIcon";
 import Loader from "../../shared/Components/Loader";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Registration = ({ navigation }) => {
-  const { isLoading, error } = useSelector(getUserState);
   const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(getPrimaryUserState);
   const usernameInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
@@ -43,9 +44,7 @@ const Registration = ({ navigation }) => {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => {
-            passwordInput.current.focus();
-          },
+          onPress: () => dispatch(resetErrorAction()),
         },
       ]);
     }
@@ -60,9 +59,7 @@ const Registration = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => {
-              usernameInput.current.focus();
-            },
+            onPress: () => usernameInput.current.focus(),
           },
         ]
       );
@@ -71,9 +68,7 @@ const Registration = ({ navigation }) => {
       return Alert.alert("Invalid Email!", "Use valid email and try again.", [
         {
           text: "OK",
-          onPress: () => {
-            emailInput.current.focus();
-          },
+          onPress: () => emailInput.current.focus(),
         },
       ]);
     }
@@ -84,9 +79,7 @@ const Registration = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => {
-              passwordInput.current.focus();
-            },
+            onPress: () => passwordInput.current.focus(),
           },
         ]
       );
@@ -104,15 +97,6 @@ const Registration = ({ navigation }) => {
     >
       <View style={styles.mainBlock}>
         {isLoading && <Loader />}
-        {/* {error &&
-          Alert.alert("Something went wrong...", error, [
-            {
-              text: "OK",
-              onPress: () => {
-                passwordInput.current.focus();
-              },
-            },
-          ])} */}
         <ImageBackground
           style={styles.backgroundImg}
           source={require("../../assets/background.png")}

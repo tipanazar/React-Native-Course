@@ -15,15 +15,16 @@ import {
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 
-import { getUserState } from "../../redux/selectors";
+import { getPrimaryUserState } from "../../redux/selectors";
 import { loginUser } from "../../redux/user/userOperations";
+import { resetErrorAction } from "../../redux/user/userActions";
 
 import Loader from "../../shared/Components/Loader";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const Login = ({ navigation }) => {
-  const { isLoading, error } = useSelector(getUserState);
   const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(getPrimaryUserState);
   const emailInput = useRef();
   const passwordInput = useRef();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
@@ -38,9 +39,7 @@ const Login = ({ navigation }) => {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => {
-            passwordInput.current.focus();
-          },
+          onPress: () => dispatch(resetErrorAction()),
         },
       ]);
     }
@@ -52,9 +51,7 @@ const Login = ({ navigation }) => {
       return Alert.alert("Invalid Email!", "Use valid email and try again.", [
         {
           text: "OK",
-          onPress: () => {
-            emailInput.current.focus();
-          },
+          onPress: () => emailInput.current.focus(),
         },
       ]);
     }
@@ -65,9 +62,7 @@ const Login = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => {
-              passwordInput.current.focus();
-            },
+            onPress: () => passwordInput.current.focus(),
           },
         ]
       );

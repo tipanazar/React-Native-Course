@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { auth } from "../../firebase";
-
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { async } from "@firebase/util";
+import { auth } from "../../firebase";
+
+import { getCurrentUserAction } from "./userActions";
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
@@ -59,23 +58,30 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getCurrentUser = createAsyncThunk(
-  "user/onAuthStateChange",
-  async () => {
-    let userState = { userId: null, username: null, userEmail: null };
-    await onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userState = {
-          userId: user.uid,
-          username: user.displayName,
-          userEmail: user.email,
-        };
-      }
-    });
-
-    return userState;
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOut(auth);
+      return;
+    } catch (err) {
+      return rejectWithValue(err.toString());
+    }
   }
 );
+
+export const getCurrentUser = () => (dispatch) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userData = {
+        userId: user.uid,
+        username: user.displayName,
+        userEmail: user.email,
+      };
+      dispatch(getCurrentUserAction(userData));
+    }
+  });
+};
 
 const RESPONSE = {
   _tokenResponse: {

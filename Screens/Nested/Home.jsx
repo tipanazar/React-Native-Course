@@ -1,34 +1,49 @@
-import { Text, View, Image, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
-import { getUserState } from "../../redux/selectors";
+import { useEffect } from "react";
+import { Text, View, Image, StyleSheet, Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-// import POSTS_DB from "../../shared/posts.json";
-const POSTS_DB = {Posts: []}
-
+import { getPrimaryUserState, getUserState } from "../../redux/selectors";
+import { resetErrorAction } from "../../redux/user/userActions";
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 
+import POSTS_DB from "../../shared/posts.json";
+// const POSTS_DB = {Posts: []}
+
 const Home = ({ navigation }) => {
-  const {username, userEmail} = useSelector(getUserState)
-  
+  const dispatch = useDispatch();
+  const { error } = useSelector(getPrimaryUserState);
+  const { username, userEmail } = useSelector(getUserState);
+
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => dispatch(resetErrorAction()),
+        },
+      ]);
+    }
+  }, [error]);
+
   return (
-    <View style={{backgroundColor: "white"}}>
-    <PostsListMarkup
-      postsArr={POSTS_DB.Posts}
-      navigation={navigation}
-      listHeaderComponent={
-        <View style={styles.userBlock}>
-          <Image
-            style={styles.userAvatar}
-            source={require("../../assets/myAvatar.jpg")}
+    <View style={{ backgroundColor: "white" }}>
+      <PostsListMarkup
+        postsArr={POSTS_DB.Posts}
+        navigation={navigation}
+        listHeaderComponent={
+          <View style={styles.userBlock}>
+            <Image
+              style={styles.userAvatar}
+              source={require("../../assets/myAvatar.jpg")}
             />
-          <View>
-            <Text style={styles.userBlockLogin}>{username}</Text>
-            <Text style={styles.userBlockEmail}>{userEmail}</Text>
+            <View>
+              <Text style={styles.userBlockLogin}>{username}</Text>
+              <Text style={styles.userBlockEmail}>{userEmail}</Text>
+            </View>
           </View>
-        </View>
-      }
+        }
       />
-      </View>
+    </View>
   );
 };
 

@@ -1,10 +1,10 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import UserProfile from "../Nested/UserProfile";
 import Comments from "../../shared/Components/Comments";
 import Map from "../../shared/Components/Map";
-import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
+import { GoBackIcon } from "../../shared/SvgComponents";
 
 const ProfileScreen = createStackNavigator();
 const Profile = () => {
@@ -30,20 +30,6 @@ const Profile = () => {
         options={{
           headerTitle: "UserProfile",
           headerShown: false,
-          headerRight: () => (
-            <TouchableOpacity
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "30%",
-              }}
-              onPress={() => console.log("logout")}
-            >
-              <LogoutIcon />
-            </TouchableOpacity>
-          ),
         }}
       />
       <ProfileScreen.Screen
