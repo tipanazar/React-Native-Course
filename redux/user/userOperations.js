@@ -8,6 +8,9 @@ import {
   updateProfile,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { async } from "@firebase/util";
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
@@ -25,6 +28,7 @@ export const registerUser = createAsyncThunk(
       const result = {
         userId: newUser.user.uid,
         username: newUser.user.displayName,
+        userEmail: newUser.user.email,
       };
       return result;
     } catch (err) {
@@ -46,6 +50,7 @@ export const loginUser = createAsyncThunk(
       const result = {
         userId: response.user.uid,
         username: response.user.displayName,
+        userEmail: response.user.email,
       };
       return result;
     } catch (err) {
@@ -54,16 +59,23 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getCurrentUser = createAsyncThunk("user/onAuthStateChange", () => {
-  let userState = { userId: null, username: null };
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      userState.userId = user.uid;
-      userState.username = user.displayName;
-    }
-  });
-  return userState;
-});
+export const getCurrentUser = createAsyncThunk(
+  "user/onAuthStateChange",
+  async () => {
+    let userState = { userId: null, username: null, userEmail: null };
+    await onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userState = {
+          userId: user.uid,
+          username: user.displayName,
+          userEmail: user.email,
+        };
+      }
+    });
+
+    return userState;
+  }
+);
 
 const RESPONSE = {
   _tokenResponse: {

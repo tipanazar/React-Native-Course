@@ -10,12 +10,15 @@ import {
   Platform,
 } from "react-native";
 
-import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
+import { useSelector } from "react-redux";
+import { getUserState } from "../../redux/selectors";
 
 import POSTS_DB from "../../shared/posts.json";
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
+import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
 
 const Profile = ({ navigation }) => {
+  const { username } = useSelector(getUserState);
   const [isImageSet, setIsImageSet] = useState(false);
 
   return (
@@ -75,7 +78,7 @@ const Profile = ({ navigation }) => {
             >
               <LogoutIcon />
             </TouchableOpacity>
-            <Text style={styles.userName}>Nazar Karpeko</Text>
+            <Text style={styles.userName}>{username}</Text>
           </View>
         }
       />

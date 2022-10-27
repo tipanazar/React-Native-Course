@@ -8,7 +8,7 @@ const initialState = {
   user: {
     userId: null,
     username: null,
-    stateChange: false,
+    userEmail: null,
   },
 };
 
@@ -25,6 +25,7 @@ const userSlice = createSlice({
       state.user = {
         userId: payload.userId,
         username: payload.username || null,
+        userEmail: payload.userEmail,
       };
       state.isLoading = false;
     },
@@ -43,6 +44,7 @@ const userSlice = createSlice({
       state.user = {
         userId: payload.userId,
         username: payload.username || null,
+        userEmail: payload.userEmail,
       };
       state.isLoading = false;
     },
@@ -54,9 +56,11 @@ const userSlice = createSlice({
     },
 
     [getCurrentUser.fulfilled]: (state, { payload }) => {
-      console.log(payload)
-      state.user.userId = payload.userId;
-      state.user.username = payload.username;
+      state.user = {
+        userId: payload.userId,
+        username: payload.username || null,
+        userEmail: payload.userEmail,
+      };
     },
   },
 });

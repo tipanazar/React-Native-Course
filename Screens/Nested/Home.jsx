@@ -1,4 +1,6 @@
 import { Text, View, Image, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
+import { getUserState } from "../../redux/selectors";
 
 // import POSTS_DB from "../../shared/posts.json";
 const POSTS_DB = {Posts: []}
@@ -6,6 +8,8 @@ const POSTS_DB = {Posts: []}
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 
 const Home = ({ navigation }) => {
+  const {username, userEmail} = useSelector(getUserState)
+  
   return (
     <View style={{backgroundColor: "white"}}>
     <PostsListMarkup
@@ -18,8 +22,8 @@ const Home = ({ navigation }) => {
             source={require("../../assets/myAvatar.jpg")}
             />
           <View>
-            <Text style={styles.userBlockLogin}>TopTester1337</Text>
-            <Text style={styles.userBlockEmail}>qwerty228@gmail.com</Text>
+            <Text style={styles.userBlockLogin}>{username}</Text>
+            <Text style={styles.userBlockEmail}>{userEmail}</Text>
           </View>
         </View>
       }
