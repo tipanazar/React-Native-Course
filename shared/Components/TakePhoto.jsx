@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { Camera } from "expo-camera";
@@ -6,12 +6,10 @@ import * as MediaLibrary from "expo-media-library";
 
 import { CameraIcon } from "../SvgComponents";
 
-const TakePhoto = ({ mainBlockStyle }) => {
+const TakePhoto = ({ mainBlockStyle, setImgState, imgState }) => {
   const isFocused = useIsFocused();
-
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  const [img, setImg] = useState({ uri: "", id: "" });
 
   useEffect(() => {
     (async () => {
@@ -27,13 +25,13 @@ const TakePhoto = ({ mainBlockStyle }) => {
       const { uri } = await cameraRef.takePictureAsync();
       const newPic = await MediaLibrary.createAssetAsync(uri);
       await MediaLibrary.createAlbumAsync("OnlineGallery", newPic.id);
-      setImg({ uri: newPic.uri, id: newPic.id });
+      setImgState({ uri: newPic.uri, id: newPic.id });
       return;
     }
     const { uri } = await cameraRef.takePictureAsync();
     const newPic = await MediaLibrary.createAssetAsync(uri);
     await MediaLibrary.addAssetsToAlbumAsync([newPic.id], album.id);
-    setImg({ uri: newPic.uri, id: newPic.id });
+    setImgState({ uri: newPic.uri, id: newPic.id });
   };
 
   return (
@@ -44,14 +42,14 @@ const TakePhoto = ({ mainBlockStyle }) => {
           if (cameraRef) {
             await getPic();
           }
-          if (img.uri.length) {
-            await MediaLibrary.deleteAssetsAsync([img.id]);
-            setImg({ uri: "", id: "" });
+          if (imgState.uri) {
+            await MediaLibrary.deleteAssetsAsync([imgState.id]);
+            setImgState({ uri: "", id: "" });
           }
         }}
       >
-        {img.uri.length ? (
-          <Image source={{ uri: img.uri }} style={styles.camera} />
+        {imgState.uri ? (
+          <Image source={{ uri: imgState.uri }} style={styles.camera} />
         ) : isFocused ? (
           <Camera
             type="back"
@@ -73,7 +71,7 @@ const TakePhoto = ({ mainBlockStyle }) => {
       </TouchableOpacity>
       <Text style={styles.cameraBlockTitle}>
         {hasPermission === true
-          ? img.id.length
+          ? imgState.id.length
             ? "Remove Photo"
             : "Take a Photo"
           : "Importing photos requires access to your camera and device storage."}
@@ -82,7 +80,7 @@ const TakePhoto = ({ mainBlockStyle }) => {
   );
 };
 
-export default TakePhoto;
+export default memo(TakePhoto);
 
 const styles = StyleSheet.create({
   cameraBlock: {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import * as Location from "expo-location";
 import {
@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from "react-native";
 
 import TakePhoto from "../../shared/Components/TakePhoto";
@@ -18,6 +19,8 @@ import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
 const CreatePost = () => {
   const isFocused = useIsFocused();
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [img, setImg] = useState({ uri: "", id: "" });
+  const [postTitle, setPostTitle] = useState("");
   const [locationString, setLocationString] = useState({
     text: "Press to find location",
     isLocation: false,
@@ -31,21 +34,27 @@ const CreatePost = () => {
         return;
       }
     })();
+  }, []);
 
-    const keyboardShowListener = Keyboard.addListener(
+  useEffect(() => {
+    Keyboard.addListener(
       Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
       () => setIsKeyboardShown(true)
     );
-    const keyboardHideListener = Keyboard.addListener(
+    Keyboard.addListener(
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
       () => setIsKeyboardShown(false)
     );
 
     if (!isFocused) {
-      keyboardShowListener.remove();
-      keyboardHideListener.remove();
+      Keyboard.removeAllListeners(
+        Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow"
+      );
+      Keyboard.removeAllListeners(
+        Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide"
+      );
     }
-  });
+  }, [isFocused]);
 
   const setLocation = async () => {
     if (locationString !== "Permission to access location was denied") {
@@ -62,10 +71,39 @@ const CreatePost = () => {
     }
   };
 
+  const handleSubmit = () => {
+    if (!img.uri) {
+      return Alert.alert(
+        "Photo should be added!",
+        "Take photo and try again.",
+        [{ text: "OK" }]
+      );
+    }
+    if (!postTitle) {
+      return Alert.alert(
+        "Post title should be added!",
+        "Add post title and try again.",
+        [{ text: "OK" }]
+      );
+    }
+    if (!locationString.isLocation) {
+      return Alert.alert(
+        "Location should be added!",
+        "Choose location and try again.",
+        [{ text: "OK" }]
+      );
+    }
+    console.log("все ок");
+  };
+
+  // console.log(img.uri)
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.mainBlock}>
         <TakePhoto
+          setImgState={(picData) => setImg(picData)}
+          imgState={img}
           mainBlockStyle={{
             ...styles.takePhotoBlock,
             display: isKeyboardShown ? "none" : "flex",
@@ -74,6 +112,7 @@ const CreatePost = () => {
         <View style={styles.form}>
           <TextInput
             style={styles.input}
+            onChangeText={(text) => setPostTitle(text)}
             returnKeyType="done"
             placeholder="Title..."
           />
@@ -96,7 +135,11 @@ const CreatePost = () => {
               {locationString.text}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.publishBtn} activeOpacity={0.6}>
+          <TouchableOpacity
+            style={styles.publishBtn}
+            activeOpacity={0.6}
+            onPress={handleSubmit}
+          >
             <Text style={styles.publishBtnText}>Publish</Text>
           </TouchableOpacity>
         </View>

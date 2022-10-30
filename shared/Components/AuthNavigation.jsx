@@ -6,17 +6,17 @@ import Login from "../../Screens/Auth/Login";
 const AuthNavigation = () => {
   const AuthScreens = createStackNavigator();
   return (
-    <AuthScreens.Navigator initialRouteName="Sign Up">
+    <AuthScreens.Navigator initialRouteName="Log In">
       <AuthScreens.Screen
-        name="Sign Up"
-        component={Registration}
+        name="Log In"
+        component={Login}
         options={{
           headerShown: false,
         }}
       />
       <AuthScreens.Screen
-        name="Log In"
-        component={Login}
+        name="Sign Up"
+        component={Registration}
         options={{
           headerShown: false,
         }}

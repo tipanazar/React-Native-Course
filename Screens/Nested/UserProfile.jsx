@@ -44,8 +44,11 @@ const Profile = ({ navigation }) => {
       aspect: [1, 1],
       quality: 0.3,
     });
+    if (photo.cancelled) {
+      return;
+    }
     const result = await (await fetch(photo.uri)).blob();
-    result.cancelled || dispatch(uploadUserAvatar({ photo: result }));
+    dispatch(uploadUserAvatar({ photo: result }));
   };
 
   return (

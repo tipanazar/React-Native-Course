@@ -7,8 +7,8 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, usersAvatarStorageRef } from "../../firebase";
+import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import { auth, storage } from "../../firebase";
 
 import { getCurrentUserAction } from "./userActions";
 
@@ -27,6 +27,10 @@ export const registerUser = createAsyncThunk(
       );
 
       if (userAvatar) {
+        const usersAvatarStorageRef = ref(
+          storage,
+          `/userAvatars/${auth.currentUser?.uid}`
+        );
         const photo = await (await fetch(userAvatar)).blob();
         await uploadBytes(usersAvatarStorageRef, photo);
         const photoUrl = await getDownloadURL(usersAvatarStorageRef);
@@ -82,6 +86,11 @@ export const uploadUserAvatar = createAsyncThunk(
   "user/uploadUserAvatar",
   async ({ photo }, { rejectWithValue }) => {
     try {
+      console.log('upd')
+      const usersAvatarStorageRef = ref(
+        storage,
+        `/userAvatars/${auth.currentUser?.uid}`
+      );
       await uploadBytes(usersAvatarStorageRef, photo);
       const photoURL = await getDownloadURL(usersAvatarStorageRef);
       await updateProfile(auth.currentUser, { photoURL });

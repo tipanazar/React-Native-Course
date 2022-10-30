@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getStorage, ref } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 // import { getFirestore } from "firebase/firestore";
 
 export const firebaseApp = initializeApp({
@@ -16,8 +16,4 @@ export const auth = getAuth(firebaseApp);
 export const storage = getStorage(
   firebaseApp,
   "gs://react-native-goit-e2d9f.appspot.com"
-);
-export const usersAvatarStorageRef = ref(
-  storage,
-  `/userAvatars/${auth.currentUser?.uid}`
 );
