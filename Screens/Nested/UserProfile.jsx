@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Text,
@@ -11,9 +11,10 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import { resetErrorAction } from "../../redux/user/userActions";
-import { logoutUser } from "../../redux/user/userOperations";
+import { logoutUser, uploadUserAvatar } from "../../redux/user/userOperations";
 import { getPrimaryUserState, getUserState } from "../../redux/selectors";
 
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
@@ -24,8 +25,7 @@ import POSTS_DB from "../../shared/posts.json";
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error } = useSelector(getPrimaryUserState);
-  const { username } = useSelector(getUserState);
-  const [isImageSet, setIsImageSet] = useState(false);
+  const { username, avatarUrl } = useSelector(getUserState);
 
   useEffect(() => {
     if (error) {
@@ -37,6 +37,16 @@ const Profile = ({ navigation }) => {
       ]);
     }
   }, [error]);
+
+  const handleImagePicker = async () => {
+    const photo = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.3,
+    });
+    const result = await (await fetch(photo.uri)).blob();
+    result.cancelled || dispatch(uploadUserAvatar({ photo: result }));
+  };
 
   return (
     <ImageBackground
@@ -64,9 +74,9 @@ const Profile = ({ navigation }) => {
             <TouchableOpacity
               style={styles.userAvatarBlock}
               activeOpacity={0.8}
-              onPress={() => setIsImageSet(!isImageSet)}
+              onPress={handleImagePicker}
             >
-              {isImageSet ? (
+              {avatarUrl ? (
                 <>
                   <Image
                     style={{
@@ -74,7 +84,7 @@ const Profile = ({ navigation }) => {
                       width: "100%",
                       borderRadius: 16,
                     }}
-                    source={require("../../assets/myAvatar.jpg")}
+                    source={{ uri: avatarUrl }}
                   />
                   <AddAvatarIcon
                     style={{
@@ -149,12 +159,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 30,
     paddingHorizontal: 16,
-  },
-
-  imageWrapper: {
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: "rgb(34, 60, 80)",
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
   },
 });

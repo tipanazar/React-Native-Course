@@ -12,7 +12,7 @@ import POSTS_DB from "../../shared/posts.json";
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error } = useSelector(getPrimaryUserState);
-  const { username, userEmail } = useSelector(getUserState);
+  const { username, userEmail, avatarUrl } = useSelector(getUserState);
 
   useEffect(() => {
     if (error) {
@@ -32,10 +32,7 @@ const Home = ({ navigation }) => {
         navigation={navigation}
         listHeaderComponent={
           <View style={styles.userBlock}>
-            <Image
-              style={styles.userAvatar}
-              source={require("../../assets/myAvatar.jpg")}
-            />
+            <Image style={styles.userAvatar} source={{ uri: avatarUrl }} />
             <View>
               <Text style={styles.userBlockLogin}>{username}</Text>
               <Text style={styles.userBlockEmail}>{userEmail}</Text>
@@ -57,7 +54,13 @@ const styles = StyleSheet.create({
     marginVertical: 32,
     paddingHorizontal: 16,
   },
-  userAvatar: { height: 80, width: 80, borderRadius: 16, marginRight: 8 },
+  userAvatar: {
+    height: 80,
+    width: 80,
+    borderRadius: 16,
+    marginRight: 8,
+    backgroundColor: "#F6F6F6",
+  },
   userBlockLogin: {
     marginBottom: 2,
     fontFamily: "RobotoBold",

@@ -15,6 +15,7 @@ import {
   Alert,
 } from "react-native";
 import HideWithKeyboard from "react-native-hide-with-keyboard";
+import * as ImagePicker from "expo-image-picker";
 
 import { resetErrorAction } from "../../redux/user/userActions";
 import { registerUser } from "../../redux/user/userOperations";
@@ -30,9 +31,9 @@ const Registration = ({ navigation }) => {
   const usernameInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
-  const [isImageSet, setIsImageSet] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [userAvatar, setUserAvatar] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -49,6 +50,18 @@ const Registration = ({ navigation }) => {
       ]);
     }
   }, [error]);
+
+  const handleImagePicker = async () => {
+    if (userAvatar) {
+      return setUserAvatar(null);
+    }
+    const photo = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.3,
+    });
+    photo.cancelled || setUserAvatar(photo.uri);
+  };
 
   const handleSubmit = () => {
     const { username, email, password } = formData;
@@ -85,7 +98,7 @@ const Registration = ({ navigation }) => {
       );
     }
 
-    dispatch(registerUser(formData));
+    dispatch(registerUser({ formData, userAvatar: userAvatar }));
   };
 
   return (
@@ -103,19 +116,18 @@ const Registration = ({ navigation }) => {
         />
         <KeyboardAvoidingView
           style={styles.form}
-          behavior={Platform.OS === "ios" ? "padding" : ""}
-          // behavior="padding"
+          behavior={Platform.OS === "ios" && "padding"}
         >
           <TouchableOpacity
             style={styles.userAvatarBlock}
             activeOpacity={0.9}
-            onPress={() => setIsImageSet(!isImageSet)}
+            onPress={handleImagePicker}
           >
-            {isImageSet ? (
+            {userAvatar ? (
               <>
                 <Image
                   style={{ height: "100%", width: "100%", borderRadius: 16 }}
-                  source={require("../../assets/myAvatar.jpg")}
+                  source={{ uri: userAvatar }}
                 />
                 <Icon
                   style={{

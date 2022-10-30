@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { registerUser, loginUser, logoutUser } from "./userOperations";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  uploadUserAvatar,
+} from "./userOperations";
 
 const initialState = {
   error: null,
@@ -9,6 +14,7 @@ const initialState = {
     userId: null,
     username: null,
     userEmail: null,
+    avatarUrl: null,
   },
 };
 
@@ -21,6 +27,7 @@ export const userSlice = createSlice({
         userId: payload.userId,
         username: payload.username || null,
         userEmail: payload.userEmail,
+        avatarUrl: payload.avatarUrl || null,
       };
     },
     resetError: (state) => {
@@ -37,13 +44,16 @@ export const userSlice = createSlice({
         userId: payload.userId,
         username: payload.username || null,
         userEmail: payload.userEmail,
+        avatarUrl: payload.avatarUrl || null,
       };
+      console.log(payload.avatarUrl)
       state.isLoading = false;
     },
     [registerUser.rejected]: (state, { payload }) => {
       payload === "FirebaseError: Firebase: Error (auth/email-already-in-use)."
         ? (state.error = "Email is already in use!")
         : (state.error = payload);
+      console.log("registration error");
       state.isLoading = false;
     },
 
@@ -56,6 +66,7 @@ export const userSlice = createSlice({
         userId: payload.userId,
         username: payload.username || null,
         userEmail: payload.userEmail,
+        avatarUrl: payload.avatarUrl || null,
       };
       state.isLoading = false;
     },
@@ -68,11 +79,21 @@ export const userSlice = createSlice({
       state.isLoading = false;
     },
 
+    [uploadUserAvatar.pending]: (state) => {
+      state.error = null;
+    },
+    [uploadUserAvatar.fulfilled]: (state, { payload }) => {
+      state.user.avatarUrl = payload;
+    },
+    [uploadUserAvatar.error]: (state, { payload }) => {
+      state.error = payload;
+    },
+
     [logoutUser.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
-    [logoutUser.fulfilled]: (state, { payload }) => {
+    [logoutUser.fulfilled]: (state) => {
       state.user = {
         userId: null,
         username: null,
