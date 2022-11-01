@@ -6,18 +6,26 @@ import MainNavigation from "./shared/Components/MainNavigation";
 
 import { getUserId } from "./redux/selectors";
 import { getCurrentUser } from "./redux/user/userOperations";
+import { getPosts } from "./redux/post/postOperations";
+import { useState } from "react";
 
 const Main = () => {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
   useEffect(() => {
     if (!userId) {
       dispatch(getCurrentUser());
-      // console.log("get")
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId && isFirstRender) {
+      setIsFirstRender(false);
+      dispatch(getPosts());
     }
   });
-
-  // console.log(userId);
 
   return <>{userId ? <MainNavigation /> : <AuthNavigation />}</>;
 };

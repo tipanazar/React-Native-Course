@@ -14,15 +14,26 @@ import {
 } from "react-native";
 
 import TakePhoto from "../../shared/Components/TakePhoto";
+import Loader from "../../shared/Components/Loader";
 import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost } from "../../redux/post/postOperations";
+import { getPostsState } from "../../redux/selectors";
+import { resetPostErrorAction } from "../../redux/post/postActions";
 
-const CreatePost = () => {
+const CreatePost = ({ navigation }) => {
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const { error, isLoading } = useSelector(getPostsState);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [img, setImg] = useState({ uri: "", id: "" });
   const [postTitle, setPostTitle] = useState("");
-  const [locationString, setLocationString] = useState({
+  const [postLocation, setPostLocation] = useState({
     text: "Press to find location",
+    coords: {
+      longitude: null,
+      latitude: null,
+    },
     isLocation: false,
   });
 
@@ -30,7 +41,7 @@ const CreatePost = () => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setLocationString("Permission to access location was denied");
+        setPostLocation("Permission to access location was denied");
         return;
       }
     })();
@@ -56,22 +67,47 @@ const CreatePost = () => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => dispatch(resetPostErrorAction()),
+        },
+      ]);
+    }
+  }, [error]);
+
   const setLocation = async () => {
-    if (locationString !== "Permission to access location was denied") {
-      setLocationString({ text: "Waiting...", isLocation: false });
-      let location = await Location.getCurrentPositionAsync({});
+    if (postLocation !== "Permission to access location was denied") {
+      setPostLocation({
+        text: "Waiting...",
+        coords: {
+          longitude: null,
+          latitude: null,
+        },
+        isLocation: false,
+      });
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Low,
+      });
       const parsedLocation = await Location.reverseGeocodeAsync({
         longitude: location.coords.longitude,
         latitude: location.coords.latitude,
       });
-      setLocationString({
+
+      setPostLocation({
         text: `${parsedLocation[0].street}, ${parsedLocation[0].city}, ${parsedLocation[0].country}`,
+        coords: {
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        },
         isLocation: true,
       });
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!img.uri) {
       return Alert.alert(
         "Photo should be added!",
@@ -86,21 +122,32 @@ const CreatePost = () => {
         [{ text: "OK" }]
       );
     }
-    if (!locationString.isLocation) {
+    if (!postLocation.isLocation) {
       return Alert.alert(
         "Location should be added!",
         "Choose location and try again.",
         [{ text: "OK" }]
       );
     }
-    console.log("все ок");
-  };
 
-  // console.log(img.uri)
+    const postData = {
+      postTitle,
+      postImage: img.uri,
+      postLocation: {
+        latitude: postLocation.coords.latitude,
+        longitude: postLocation.coords.longitude,
+        locationString: postLocation.text,
+      },
+    };
+    dispatch(createPost({ postData })).then(
+      (ev) => ev.error || navigation.navigate("Posts")
+    );
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.mainBlock}>
+        {isLoading && <Loader />}
         <TakePhoto
           setImgState={(picData) => setImg(picData)}
           imgState={img}
@@ -113,6 +160,7 @@ const CreatePost = () => {
           <TextInput
             style={styles.input}
             onChangeText={(text) => setPostTitle(text)}
+            defaultValue={postTitle}
             returnKeyType="done"
             placeholder="Title..."
           />
@@ -129,10 +177,10 @@ const CreatePost = () => {
             <Text
               style={{
                 ...styles.locationBtnText,
-                color: locationString.isLocation ? "#212121" : "#BDBDBD",
+                color: postLocation.isLocation ? "#212121" : "#BDBDBD",
               }}
             >
-              {locationString.text}
+              {postLocation.text}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

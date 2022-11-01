@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { collection, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 // import { getFirestore } from "firebase/firestore";
 
@@ -17,3 +18,5 @@ export const storage = getStorage(
   firebaseApp,
   "gs://react-native-goit-e2d9f.appspot.com"
 );
+export const firestoreApp = getFirestore(firebaseApp);
+// export const postsCollection = collection(storage, "posts");

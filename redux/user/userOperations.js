@@ -29,7 +29,7 @@ export const registerUser = createAsyncThunk(
       if (userAvatar) {
         const usersAvatarStorageRef = ref(
           storage,
-          `/userAvatars/${auth.currentUser?.uid}`
+          `/userAvatars/${auth.currentUser.uid}`
         );
         const photo = await (await fetch(userAvatar)).blob();
         await uploadBytes(usersAvatarStorageRef, photo);
@@ -45,7 +45,6 @@ export const registerUser = createAsyncThunk(
           avatarUrl: photoUrl,
         };
       } else if (!userAvatar) {
-        console.log("без фото");
         await updateProfile(auth.currentUser, { displayName: username });
         return {
           userId: newUser.user.uid,
@@ -86,12 +85,12 @@ export const uploadUserAvatar = createAsyncThunk(
   "user/uploadUserAvatar",
   async ({ photo }, { rejectWithValue }) => {
     try {
-      console.log('upd')
       const usersAvatarStorageRef = ref(
         storage,
-        `/userAvatars/${auth.currentUser?.uid}`
+        `/userAvatars/${auth.currentUser.uid}`
       );
-      await uploadBytes(usersAvatarStorageRef, photo);
+      const photoBlob = await (await fetch(photo.uri)).blob();
+      await uploadBytes(usersAvatarStorageRef, photoBlob);
       const photoURL = await getDownloadURL(usersAvatarStorageRef);
       await updateProfile(auth.currentUser, { photoURL });
       return photoURL;
@@ -114,17 +113,21 @@ export const logoutUser = createAsyncThunk(
 );
 
 export const getCurrentUser = () => (dispatch) => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const userData = {
-        userId: user.uid,
-        username: user.displayName,
-        userEmail: user.email,
-        avatarUrl: user.photoURL,
-      };
-      dispatch(getCurrentUserAction(userData));
-    }
-  });
+  try {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userData = {
+          userId: user.uid,
+          username: user.displayName,
+          userEmail: user.email,
+          avatarUrl: user.photoURL,
+        };
+        dispatch(getCurrentUserAction(userData));
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // const RESPONSE = {

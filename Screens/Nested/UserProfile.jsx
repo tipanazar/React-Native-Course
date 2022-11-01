@@ -13,26 +13,30 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-import { resetErrorAction } from "../../redux/user/userActions";
+import { resetUserErrorAction } from "../../redux/user/userActions";
 import { logoutUser, uploadUserAvatar } from "../../redux/user/userOperations";
-import { getPrimaryUserState, getUserState } from "../../redux/selectors";
+import {
+  getPostsState,
+  getPrimaryUserState,
+  getUserState,
+} from "../../redux/selectors";
 
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
-// const POSTS_DB = { Posts: [] };
-import POSTS_DB from "../../shared/posts.json";
 
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error } = useSelector(getPrimaryUserState);
-  const { username, avatarUrl } = useSelector(getUserState);
+  const { username, avatarUrl, userId } = useSelector(getUserState);
+  const { postsArr } = useSelector(getPostsState);
+  const filteredPostsArr = postsArr.filter((post) => post.postOwner === userId);
 
   useEffect(() => {
     if (error) {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => dispatch(resetErrorAction()),
+          onPress: () => dispatch(resetUserErrorAction()),
         },
       ]);
     }
@@ -47,8 +51,7 @@ const Profile = ({ navigation }) => {
     if (photo.cancelled) {
       return;
     }
-    const result = await (await fetch(photo.uri)).blob();
-    dispatch(uploadUserAvatar({ photo: result }));
+    dispatch(uploadUserAvatar({ photo }));
   };
 
   return (
@@ -57,12 +60,12 @@ const Profile = ({ navigation }) => {
       source={require("../../assets/background.png")}
     >
       <PostsListMarkup
-        postsArr={POSTS_DB.Posts}
+        postsArr={filteredPostsArr}
         navigation={navigation}
         listHeaderComponent={
           <View
             style={
-              POSTS_DB.Posts.length
+              filteredPostsArr.length
                 ? { ...styles.listHeaderBlock }
                 : {
                     ...styles.listHeaderBlock,

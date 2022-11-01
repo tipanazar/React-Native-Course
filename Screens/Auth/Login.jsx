@@ -17,7 +17,7 @@ import HideWithKeyboard from "react-native-hide-with-keyboard";
 
 import { getPrimaryUserState } from "../../redux/selectors";
 import { loginUser } from "../../redux/user/userOperations";
-import { resetErrorAction } from "../../redux/user/userActions";
+import { resetUserErrorAction } from "../../redux/user/userActions";
 
 import Loader from "../../shared/Components/Loader";
 
@@ -39,7 +39,7 @@ const Login = ({ navigation }) => {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => dispatch(resetErrorAction()),
+          onPress: () => dispatch(resetUserErrorAction()),
         },
       ]);
     }

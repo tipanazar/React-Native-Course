@@ -43,8 +43,11 @@ const TakePhoto = ({ mainBlockStyle, setImgState, imgState }) => {
             await getPic();
           }
           if (imgState.uri) {
-            await MediaLibrary.deleteAssetsAsync([imgState.id]);
-            setImgState({ uri: "", id: "" });
+            MediaLibrary.deleteAssetsAsync([imgState.id])
+              .then(() => setImgState({ uri: "", id: "" }))
+              .catch(() => {
+                return;
+              });
           }
         }}
       >
@@ -54,6 +57,8 @@ const TakePhoto = ({ mainBlockStyle, setImgState, imgState }) => {
           <Camera
             type="back"
             flashMode="auto"
+            // ratio="16:9"
+            ratio="16:9"
             ref={(ref) => setCameraRef(ref)}
             style={styles.camera}
           />

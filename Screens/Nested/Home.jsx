@@ -2,24 +2,27 @@ import { useEffect } from "react";
 import { Text, View, Image, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getPrimaryUserState, getUserState } from "../../redux/selectors";
-import { resetErrorAction } from "../../redux/user/userActions";
+import {
+  getPostsState,
+  getPrimaryUserState,
+  getUserState,
+} from "../../redux/selectors";
+import { resetUserErrorAction } from "../../redux/user/userActions";
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
-
-import POSTS_DB from "../../shared/posts.json";
-// const POSTS_DB = {Posts: []}
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error } = useSelector(getPrimaryUserState);
-  const { username, userEmail, avatarUrl } = useSelector(getUserState);
+  const { username, userEmail, avatarUrl, userId } = useSelector(getUserState);
+  const { postsArr } = useSelector(getPostsState);
+  const filteredPostsArr = postsArr.filter((post) => post.postOwner !== userId);
 
   useEffect(() => {
     if (error) {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => dispatch(resetErrorAction()),
+          onPress: () => dispatch(resetUserErrorAction()),
         },
       ]);
     }
@@ -28,7 +31,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={{ backgroundColor: "white" }}>
       <PostsListMarkup
-        postsArr={POSTS_DB.Posts}
+        postsArr={filteredPostsArr}
         navigation={navigation}
         listHeaderComponent={
           <View style={styles.userBlock}>

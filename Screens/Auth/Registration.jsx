@@ -17,7 +17,7 @@ import {
 import HideWithKeyboard from "react-native-hide-with-keyboard";
 import * as ImagePicker from "expo-image-picker";
 
-import { resetErrorAction } from "../../redux/user/userActions";
+import { resetUserErrorAction } from "../../redux/user/userActions";
 import { registerUser } from "../../redux/user/userOperations";
 import { getPrimaryUserState } from "../../redux/selectors";
 
@@ -45,7 +45,7 @@ const Registration = ({ navigation }) => {
       return Alert.alert("Something went wrong...", error, [
         {
           text: "OK",
-          onPress: () => dispatch(resetErrorAction()),
+          onPress: () => dispatch(resetUserErrorAction()),
         },
       ]);
     }

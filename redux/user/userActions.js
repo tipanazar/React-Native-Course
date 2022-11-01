@@ -1,4 +1,4 @@
 import { createAction } from "@reduxjs/toolkit";
 
 export const getCurrentUserAction = createAction("user/getCurrentUser");
-export const resetErrorAction = createAction("user/resetError");
+export const resetUserErrorAction = createAction("user/resetUserError");

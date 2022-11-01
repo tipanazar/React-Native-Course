@@ -11,7 +11,7 @@ import dateParser from "../hooks/dateParser";
 import { CommentIcon, LikeIcon, MapPinIcon } from "../SvgComponents";
 
 const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item: post }) => {
     return (
       <View
         style={{
@@ -24,7 +24,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
           <Image
             style={styles.postImage}
             source={{
-              uri: item.photoAddress,
+              uri: post.postImage,
             }}
           />
         </View>
@@ -37,9 +37,9 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
               color: "#212121",
             }}
           >
-            {item.postName}
+            {post.postName}
           </Text>
-          <Text style={styles.postText}>{dateParser(item.creationDate)}</Text>
+          <Text style={styles.postText}>{dateParser(post.creationDate)}</Text>
         </View>
         <View style={styles.postTextWrapper}>
           <TouchableOpacity
@@ -47,14 +47,14 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
             activeOpacity={0.6}
             onPress={() =>
               navigation.navigate("Comments", {
-                imgAddress: item.photoAddress,
-                commentsArr: item.comments,
+                imgAddress: post.postImage,
+                commentsArr: post.comments,
               })
             }
           >
             <CommentIcon style={{ marginRight: 0 }} />
             <Text style={styles.postText}>
-              &nbsp;&#8210;&nbsp;{item.comments.length}
+              &nbsp;&#8210;&nbsp;{post.comments.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -62,9 +62,8 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
             activeOpacity={0.6}
             onPress={() =>
               navigation.navigate("Map", {
-                location: item.location.coords,
-                title: item.postName,
-                description: item.location.name,
+                location: post.postLocation,
+                title: post.postName,
               })
             }
           >
@@ -76,7 +75,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
                 textDecorationLine: "underline",
               }}
             >
-              {item.location.name}
+              {post.postLocation.locationString}
             </Text>
           </TouchableOpacity>
         </View>
@@ -88,7 +87,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
           }}
         >
           <LikeIcon />
-          <Text style={styles.postText}>&nbsp;&#8210;&nbsp;{item.likes}</Text>
+          <Text style={styles.postText}>&nbsp;&#8210;&nbsp;{post.likes}</Text>
         </View>
       </View>
     );
@@ -98,10 +97,10 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
     <FlatList
       height="100%"
       data={postsArr.sort(
-        (item1, item2) => item2.creationDate - item1.creationDate
+        (post1, post2) => post2.creationDate - post1.creationDate
       )}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(post) => post.id}
       ListHeaderComponent={listHeaderComponent}
     />
   );

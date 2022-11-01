@@ -30,7 +30,7 @@ export const userSlice = createSlice({
         avatarUrl: payload.avatarUrl || null,
       };
     },
-    resetError: (state) => {
+    resetUserError: (state) => {
       state.error = null;
     },
   },
@@ -46,14 +46,12 @@ export const userSlice = createSlice({
         userEmail: payload.userEmail,
         avatarUrl: payload.avatarUrl || null,
       };
-      console.log(payload.avatarUrl)
       state.isLoading = false;
     },
     [registerUser.rejected]: (state, { payload }) => {
       payload === "FirebaseError: Firebase: Error (auth/email-already-in-use)."
         ? (state.error = "Email is already in use!")
         : (state.error = payload);
-      console.log("registration error");
       state.isLoading = false;
     },
 
@@ -108,4 +106,4 @@ export const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;
