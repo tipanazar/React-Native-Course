@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -6,12 +7,16 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { addLike, removeLike } from "../../redux/post/postOperations";
+import { getUserId } from "../../redux/selectors";
 
 import dateParser from "../hooks/dateParser";
 import { CommentIcon, LikeIcon, MapPinIcon } from "../SvgComponents";
 
 const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
+  const userId = useSelector(getUserId);
   const renderItem = ({ item: post }) => {
+    const isLiked = post.likesArr.includes(userId);
     return (
       <View
         style={{
@@ -49,6 +54,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
               navigation.navigate("Comments", {
                 imgAddress: post.postImage,
                 commentsArr: post.commentsArr,
+                postId: post.id,
               })
             }
           >
@@ -89,9 +95,13 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
           <TouchableOpacity
             style={styles.postButton}
             activeOpacity={0.3}
-            onPress={() => console.log("Like!")}
+            onPress={() =>
+              isLiked
+                ? removeLike({ postId: post.id })
+                : addLike({ postId: post.id })
+            }
           >
-            <LikeIcon />
+            <LikeIcon fill={isLiked && "#FF6C00"} />
             <Text style={styles.postText}>
               &nbsp;&#8210;&nbsp;{post.likesArr.length}
             </Text>

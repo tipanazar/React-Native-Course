@@ -1,6 +1,15 @@
 import { createAsyncThunk, nanoid } from "@reduxjs/toolkit";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { auth, storage, firestoreApp } from "../../firebase";
 import { postsHandler } from "./postActions";
 
@@ -30,8 +39,8 @@ export const createPost = createAsyncThunk(
       await uploadBytes(postImageStorageRef, photoBlob);
       const photoURL = await getDownloadURL(postImageStorageRef);
       // post upload
-      const postsStorageRef = collection(firestoreApp, `posts`);
-      await addDoc(postsStorageRef, {
+      const postsStorageRef = doc(firestoreApp, `posts`, randomId);
+      await setDoc(postsStorageRef, {
         id: randomId,
         postTitle,
         postImage: photoURL,
@@ -42,6 +51,54 @@ export const createPost = createAsyncThunk(
         creationDate: new Date().getTime(),
       });
       return;
+    } catch (err) {
+      return rejectWithValue(err.toString());
+    }
+  }
+);
+
+export const addLike = async ({ postId }) => {
+  try {
+    const postRef = doc(firestoreApp, `posts/${postId}`);
+    await updateDoc(postRef, {
+      likesArr: arrayUnion(auth.currentUser.uid),
+    });
+  } catch (err) {
+    console.log(err.toString());
+  }
+};
+
+export const removeLike = async ({ postId }) => {
+  try {
+    const postRef = doc(firestoreApp, `posts/${postId}`);
+    await updateDoc(postRef, {
+      likesArr: arrayRemove(auth.currentUser.uid),
+    });
+  } catch (err) {
+    console.log(err.toString());
+  }
+};
+
+// console.log(auth.currentUser);
+
+export const addComment = createAsyncThunk(
+  "posts/addComment",
+  async ({ newCommentData }, { rejectWithValue }) => {
+    try {
+      const { text, postId } = newCommentData;
+      const postRef = doc(firestoreApp, `posts/${postId}`);
+      const newComment = {
+        text,
+        sender: {
+          id: auth.currentUser.uid,
+          name: auth.currentUser.displayName,
+          avatarUrl: auth.currentUser.photoURL,
+        },
+        creationDate: new Date().getTime(),
+      };
+      await updateDoc(postRef, {
+        commentsArr: arrayUnion(newComment),
+      });
     } catch (err) {
       return rejectWithValue(err.toString());
     }

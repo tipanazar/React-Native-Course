@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { createPost } from "./postOperations";
+import { addComment, createPost } from "./postOperations";
 
 const initialState = {
   postsArr: [],
@@ -29,6 +29,18 @@ const postsSlice = createSlice({
       state.isLoading = false;
     },
     [createPost.rejected]: (state, { payload }) => {
+      state.error = payload;
+      state.isLoading = false;
+    },
+
+    [addComment.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [addComment.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [addComment.rejected]: (state, { payload }) => {
       state.error = payload;
       state.isLoading = false;
     },

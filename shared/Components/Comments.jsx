@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FlatList,
   Image,
@@ -6,22 +8,62 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
+
+import { resetPostErrorAction } from "../../redux/post/postActions";
+import { addComment } from "../../redux/post/postOperations";
+import { getPostsState, getUserState } from "../../redux/selectors";
 import dateParser from "../../shared/hooks/dateParser";
 import { ArrowUp } from "../../shared/SvgComponents";
+import Loader from "./Loader";
 
 const Comments = ({ route }) => {
-  const { imgAddress, commentsArr } = route.params;
-  console.log(commentsArr)
+  const { imgAddress, postId } = route.params;
+  const dispatch = useDispatch();
+  const [commentText, setCommentText] = useState("");
+  const { userId } = useSelector(getUserState);
+  const { postsArr, error, isLoading } = useSelector(getPostsState);
+  const commentsArr = [
+    ...postsArr.find((post) => post.id === postId).commentsArr,
+  ].sort((item1, item2) => item2.creationDate - item1.creationDate);
+
+  useEffect(() => {
+    if (error) {
+      return Alert.alert("Something went wrong...", error, [
+        {
+          text: "OK",
+          onPress: () => dispatch(resetPostErrorAction()),
+        },
+      ]);
+    }
+  }, [error]);
+
+  const handleSubmit = () => {
+    if (!commentText) {
+      return Alert.alert(
+        "Oops, your comment is empty!",
+        "Write your comment and try again.",
+        [{ text: "OK" }]
+      );
+    }
+
+    const newCommentData = {
+      postId,
+      text: commentText,
+    };
+    dispatch(addComment({ newCommentData })).then(
+      (ev) => ev.error || setCommentText("")
+    );
+  };
+
   const renderItem = ({ item: comment }) => {
     return (
       <View
         style={{
           ...styles.commentItem,
-          flexDirection: comment.sender.type === "you" ? "row-reverse" : "row",
+          flexDirection: comment.sender.id === userId ? "row-reverse" : "row",
         }}
       >
         <View
@@ -33,24 +75,24 @@ const Comments = ({ route }) => {
         >
           <Image
             style={{ height: 30, width: 30, borderRadius: 30 }}
-            source={{ uri: comment.sender.senderAvatar }}
+            source={{ uri: comment.sender.avatarUrl }}
           />
         </View>
         <View
           style={
-            comment.sender.type === "you"
+            comment.sender.id === userId
               ? { marginRight: 7, maxWidth: "75%" }
               : { marginLeft: 7, maxWidth: "75%" }
           }
         >
-          {comment.sender.type !== "you" && (
+          {comment.sender.id !== userId && (
             <Text style={{ marginVertical: 3, fontFamily: "RobotoMedium" }}>
-              {comment.sender.senderName}
+              {comment.sender.name}
             </Text>
           )}
           <View
             style={
-              comment.sender.type === "you"
+              comment.sender.id === userId
                 ? {
                     ...styles.itemTextBlock,
                     borderTopRightRadius: 0,
@@ -73,11 +115,10 @@ const Comments = ({ route }) => {
 
   return (
     <View style={styles.mainBlock}>
+      {isLoading && <Loader />}
       <FlatList
         style={styles.commentsList}
-        data={commentsArr.sort(
-          (item1, item2) => item1.creationDate - item2.creationDate
-        )}
+        data={commentsArr}
         renderItem={renderItem}
         ListHeaderComponent={
           <View style={styles.imgWrapper}>
@@ -94,11 +135,13 @@ const Comments = ({ route }) => {
             style={styles.formInput}
             returnKeyType="next"
             placeholder="Comment..."
+            defaultValue={commentText}
+            onChangeText={(text) => setCommentText(text)}
           />
           <TouchableOpacity
             style={styles.sendCommentBtn}
-            activeOpacity={1}
-            onPress={() => console.log("send")}
+            activeOpacity={0.4}
+            onPress={handleSubmit}
           >
             <ArrowUp />
           </TouchableOpacity>
