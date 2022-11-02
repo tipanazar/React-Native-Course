@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { addComment, createPost, removeComment } from "./postOperations";
+import {
+  addComment,
+  createPost,
+  deletePost,
+  deleteComment,
+} from "./postOperations";
 
 const initialState = {
   postsArr: [],
@@ -33,6 +38,18 @@ const postsSlice = createSlice({
       state.isLoading = false;
     },
 
+    [deletePost.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [deletePost.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [deletePost.rejected]: (state, { payload }) => {
+      state.error = payload;
+      state.isLoading = false;
+    },
+
     [addComment.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
@@ -45,14 +62,14 @@ const postsSlice = createSlice({
       state.isLoading = false;
     },
 
-    [removeComment.pending]: (state) => {
+    [deleteComment.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
-    [removeComment.fulfilled]: (state) => {
+    [deleteComment.fulfilled]: (state) => {
       state.isLoading = false;
     },
-    [removeComment.rejected]: (state, { payload }) => {
+    [deleteComment.rejected]: (state, { payload }) => {
       state.error = payload;
       state.isLoading = false;
     },

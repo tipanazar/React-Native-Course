@@ -1,10 +1,15 @@
 import { createAsyncThunk, nanoid } from "@reduxjs/toolkit";
-import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 import {
-  addDoc,
+  uploadBytes,
+  getDownloadURL,
+  ref,
+  deleteObject,
+} from "firebase/storage";
+import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   setDoc,
@@ -23,7 +28,7 @@ export const getPosts = () => (dispatch) => {
       }
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.toString());
   }
 };
 
@@ -57,6 +62,23 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk(
+  "post/createPost",
+  async ({ postId }, { rejectWithValue }) => {
+    try {
+      // post delete
+      const postsStorageRef = doc(firestoreApp, `posts`, postId);
+      await deleteDoc(postsStorageRef);
+      // image delete
+      const postImageStorageRef = ref(storage, `posts/${postId}`);
+      await deleteObject(postImageStorageRef);
+      return;
+    } catch (err) {
+      return rejectWithValue(err.toString());
+    }
+  }
+);
+
 export const addLike = async ({ postId }) => {
   try {
     const postRef = doc(firestoreApp, `posts/${postId}`);
@@ -78,8 +100,6 @@ export const removeLike = async ({ postId }) => {
     console.log(err.toString());
   }
 };
-
-// console.log(auth.currentUser);
 
 export const addComment = createAsyncThunk(
   "posts/addComment",
@@ -105,7 +125,7 @@ export const addComment = createAsyncThunk(
   }
 );
 
-export const removeComment = createAsyncThunk(
+export const deleteComment = createAsyncThunk(
   "posts/removeComment",
   async ({ data }, { rejectWithValue }) => {
     try {

@@ -15,7 +15,9 @@ const Home = ({ navigation }) => {
   const { error } = useSelector(getPrimaryUserState);
   const { username, userEmail, avatarUrl, userId } = useSelector(getUserState);
   const { postsArr } = useSelector(getPostsState);
-  const filteredPostsArr = postsArr.filter((post) => post.postAuthor !== userId);
+  const filteredPostsArr = postsArr.filter(
+    (post) => post.postAuthor !== userId
+  );
 
   useEffect(() => {
     if (error) {

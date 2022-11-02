@@ -2,12 +2,7 @@ import Svg, { Path } from "react-native-svg";
 
 const TrashIcon = () => {
   return (
-    <Svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <Path
         d="M3 6H5H21"
         stroke="#BDBDBD"

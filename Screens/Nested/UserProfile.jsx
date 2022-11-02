@@ -23,26 +23,30 @@ import {
 
 import PostsListMarkup from "../../shared/Components/PostsListMarkup";
 import { LogoutIcon, AddAvatarIcon } from "../../shared/SvgComponents";
+import Loader from "../../shared/Components/Loader";
+import { resetPostErrorAction } from "../../redux/post/postActions";
 
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { error } = useSelector(getPrimaryUserState);
+  const { error, isLoading } = useSelector(getPrimaryUserState);
   const { username, avatarUrl, userId } = useSelector(getUserState);
-  const { postsArr } = useSelector(getPostsState);
-  const filteredPostsArr = postsArr.filter(
+  const postsState = useSelector(getPostsState);
+  const filteredPostsArr = postsState.postsArr.filter(
     (post) => post.postAuthor === userId
   );
 
   useEffect(() => {
-    if (error) {
-      return Alert.alert("Something went wrong...", error, [
+    if (error || postsState.error) {
+      return Alert.alert("Something went wrong...", error || postsState.error, [
         {
           text: "OK",
-          onPress: () => dispatch(resetUserErrorAction()),
+          onPress: () =>
+            (error && dispatch(resetUserErrorAction())) ||
+            (postsState.error && dispatch(resetPostErrorAction())),
         },
       ]);
     }
-  }, [error]);
+  }, [error, postsState.error]);
 
   const handleImagePicker = async () => {
     const photo = await ImagePicker.launchImageLibraryAsync({
@@ -61,9 +65,11 @@ const Profile = ({ navigation }) => {
       style={{ height: "100%" }}
       source={require("../../assets/background.png")}
     >
+      {isLoading && <Loader />}
       <PostsListMarkup
         postsArr={filteredPostsArr}
         navigation={navigation}
+        removable
         listHeaderComponent={
           <View
             style={

@@ -83,7 +83,7 @@ export const userSlice = createSlice({
     [uploadUserAvatar.fulfilled]: (state, { payload }) => {
       state.user.avatarUrl = payload;
     },
-    [uploadUserAvatar.error]: (state, { payload }) => {
+    [uploadUserAvatar.rejected]: (state, { payload }) => {
       state.error = payload;
     },
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
-import * as Location from "expo-location";
 import {
   View,
   Text,
@@ -12,14 +12,15 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import * as Location from "expo-location";
+
+import { createPost } from "../../redux/post/postOperations";
+import { getPostsState } from "../../redux/selectors";
+import { resetPostErrorAction } from "../../redux/post/postActions";
 
 import TakePhoto from "../../shared/Components/TakePhoto";
 import Loader from "../../shared/Components/Loader";
 import MapPinIcon from "../../shared/SvgComponents/MapPinIcon";
-import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "../../redux/post/postOperations";
-import { getPostsState } from "../../redux/selectors";
-import { resetPostErrorAction } from "../../redux/post/postActions";
 
 const CreatePost = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -140,7 +141,18 @@ const CreatePost = ({ navigation }) => {
       },
     };
     dispatch(createPost({ postData })).then(
-      (ev) => ev.error || navigation.navigate("Posts")
+      (ev) => ev.error || setIsKeyboardShown(false),
+      setPostLocation({
+        text: "Press to find location",
+        coords: {
+          longitude: null,
+          latitude: null,
+        },
+        isLocation: false,
+      }),
+      setPostTitle(""),
+      setImg({ uri: "", id: "" }),
+      navigation.navigate("Posts")
     );
   };
 

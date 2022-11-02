@@ -15,8 +15,9 @@ import {
 import * as Clipboard from "expo-clipboard";
 
 import { resetPostErrorAction } from "../../redux/post/postActions";
-import { addComment, removeComment } from "../../redux/post/postOperations";
+import { addComment, deleteComment } from "../../redux/post/postOperations";
 import { getPostsState, getUserState } from "../../redux/selectors";
+
 import dateParser from "../../shared/hooks/dateParser";
 import { ArrowUp } from "../../shared/SvgComponents";
 import Loader from "./Loader";
@@ -50,7 +51,6 @@ const Comments = ({ route }) => {
         [{ text: "OK" }]
       );
     }
-
     const newCommentData = {
       postId,
       text: commentText,
@@ -61,21 +61,28 @@ const Comments = ({ route }) => {
   };
 
   const handleDelete = ({ comment }) => {
-    Alert.alert("Delete comment?", `Text: «${comment.text}»`, [
+    if (comment.sender.id === userId) {
+      return Alert.alert("Delete comment?", `Text: «${comment.text}»`, [
+        { text: "Copy", onPress: () => Clipboard.setStringAsync(comment.text) },
+        { text: "NO" },
+        {
+          text: "YES",
+          onPress: () =>
+            dispatch(
+              deleteComment({
+                data: {
+                  commentObj: comment,
+                  postId,
+                },
+              })
+            ),
+        },
+      ]);
+    }
+
+    Alert.alert("", `Text: «${comment.text}»`, [
       { text: "Copy", onPress: () => Clipboard.setStringAsync(comment.text) },
-      { text: "NO" },
-      {
-        text: "YES",
-        onPress: () =>
-          dispatch(
-            removeComment({
-              data: {
-                commentObj: comment,
-                postId,
-              },
-            })
-          ),
-      },
+      { text: "Cancel" },
     ]);
   };
 
@@ -96,7 +103,12 @@ const Comments = ({ route }) => {
           }}
         >
           <Image
-            style={{ height: 30, width: 30, borderRadius: 30 }}
+            style={{
+              height: 30,
+              width: 30,
+              borderRadius: 30,
+              backgroundColor: "rgba(0, 0, 0, 0.03)",
+            }}
             source={{ uri: comment.sender.avatarUrl }}
           />
         </View>
@@ -224,7 +236,6 @@ const styles = StyleSheet.create({
   },
   formInput: {
     backgroundColor: "#f6f6f6",
-    // height: 50,
     flex: 1,
     borderTopLeftRadius: 100,
     borderBottomLeftRadius: 100,
@@ -237,7 +248,6 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // height: 50,
     borderTopRightRadius: 100,
     borderBottomRightRadius: 100,
     borderWidth: 1,

@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { logoutUser } from "../../redux/user/userOperations";
+
+import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
 import Home from "../Nested/Home";
 import Comments from "../../shared/Components/Comments";
 import Map from "../../shared/Components/Map";
-import { LogoutIcon, GoBackIcon } from "../../shared/SvgComponents";
 
 const PostsScreen = createStackNavigator();
 const Posts = () => {

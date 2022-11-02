@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -6,19 +6,43 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Pressable,
+  Alert,
 } from "react-native";
-import { addLike, removeLike } from "../../redux/post/postOperations";
+
+import {
+  addLike,
+  deletePost,
+  removeLike,
+} from "../../redux/post/postOperations";
 import { getUserId } from "../../redux/selectors";
 
 import dateParser from "../hooks/dateParser";
 import { CommentIcon, LikeIcon, MapPinIcon } from "../SvgComponents";
 
-const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
+const PostsListMarkup = ({
+  navigation,
+  postsArr,
+  listHeaderComponent,
+  removable,
+}) => {
+  const dispatch = useDispatch();
   const userId = useSelector(getUserId);
+
   const renderItem = ({ item: post }) => {
     const isLiked = post.likesArr.includes(userId);
     return (
-      <View
+      <Pressable
+        onLongPress={() =>
+          removable &&
+          Alert.alert("Delete Post?", `Post: «${post.postTitle}»`, [
+            { text: "No" },
+            {
+              text: "Yes",
+              onPress: () => dispatch(deletePost({ postId: post.id })),
+            },
+          ])
+        }
         style={{
           paddingBottom: 35,
           paddingHorizontal: 16,
@@ -101,13 +125,13 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
                 : addLike({ postId: post.id })
             }
           >
-            <LikeIcon fill={isLiked && "#FF6C00"} />
+            <LikeIcon fill={isLiked ? "#FF6C00" : null} />
             <Text style={styles.postText}>
               &nbsp;&#8210;&nbsp;{post.likesArr.length}
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </Pressable>
     );
   };
 

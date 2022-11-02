@@ -57,7 +57,6 @@ const TakePhoto = ({ mainBlockStyle, setImgState, imgState }) => {
           <Camera
             type="back"
             flashMode="auto"
-            // ratio="16:9"
             ratio="16:9"
             ref={(ref) => setCameraRef(ref)}
             style={styles.camera}

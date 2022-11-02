@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import AuthNavigation from "./shared/Components/AuthNavigation";
-import MainNavigation from "./shared/Components/MainNavigation";
-
 import { getUserId } from "./redux/selectors";
 import { getCurrentUser } from "./redux/user/userOperations";
 import { getPosts } from "./redux/post/postOperations";
-import { useState } from "react";
+
+import AuthNavigation from "./shared/Components/AuthNavigation";
+import MainNavigation from "./shared/Components/MainNavigation";
 
 const Main = () => {
   const dispatch = useDispatch();

@@ -5,8 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import { store } from "./redux/store";
 
+import { store } from "./redux/store";
 import Main from "./Main";
 
 SplashScreen.preventAutoHideAsync();
