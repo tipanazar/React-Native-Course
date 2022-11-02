@@ -29,7 +29,9 @@ const Profile = ({ navigation }) => {
   const { error } = useSelector(getPrimaryUserState);
   const { username, avatarUrl, userId } = useSelector(getUserState);
   const { postsArr } = useSelector(getPostsState);
-  const filteredPostsArr = postsArr.filter((post) => post.postOwner === userId);
+  const filteredPostsArr = postsArr.filter(
+    (post) => post.postAuthor === userId
+  );
 
   useEffect(() => {
     if (error) {

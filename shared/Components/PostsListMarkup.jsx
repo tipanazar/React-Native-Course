@@ -37,7 +37,7 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
               color: "#212121",
             }}
           >
-            {post.postName}
+            {post.postTitle}
           </Text>
           <Text style={styles.postText}>{dateParser(post.creationDate)}</Text>
         </View>
@@ -48,13 +48,13 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
             onPress={() =>
               navigation.navigate("Comments", {
                 imgAddress: post.postImage,
-                commentsArr: post.comments,
+                commentsArr: post.commentsArr,
               })
             }
           >
             <CommentIcon style={{ marginRight: 0 }} />
             <Text style={styles.postText}>
-              &nbsp;&#8210;&nbsp;{post.comments.length}
+              &nbsp;&#8210;&nbsp;{post.commentsArr.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -86,8 +86,16 @@ const PostsListMarkup = ({ navigation, postsArr, listHeaderComponent }) => {
             marginBottom: 0,
           }}
         >
-          <LikeIcon />
-          <Text style={styles.postText}>&nbsp;&#8210;&nbsp;{post.likes}</Text>
+          <TouchableOpacity
+            style={styles.postButton}
+            activeOpacity={0.3}
+            onPress={() => console.log("Like!")}
+          >
+            <LikeIcon />
+            <Text style={styles.postText}>
+              &nbsp;&#8210;&nbsp;{post.likesArr.length}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

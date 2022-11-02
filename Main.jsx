@@ -12,20 +12,13 @@ import { useState } from "react";
 const Main = () => {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
-  const [isFirstRender, setIsFirstRender] = useState(true);
 
   useEffect(() => {
     if (!userId) {
       dispatch(getCurrentUser());
     }
   }, [userId]);
-
-  useEffect(() => {
-    if (userId && isFirstRender) {
-      setIsFirstRender(false);
-      dispatch(getPosts());
-    }
-  });
+  userId && dispatch(getPosts());
 
   return <>{userId ? <MainNavigation /> : <AuthNavigation />}</>;
 };

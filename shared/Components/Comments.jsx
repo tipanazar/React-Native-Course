@@ -15,6 +15,7 @@ import { ArrowUp } from "../../shared/SvgComponents";
 
 const Comments = ({ route }) => {
   const { imgAddress, commentsArr } = route.params;
+  console.log(commentsArr)
   const renderItem = ({ item: comment }) => {
     return (
       <View

@@ -36,9 +36,9 @@ export const createPost = createAsyncThunk(
         postTitle,
         postImage: photoURL,
         postLocation,
-        likes: 0,
-        comments: [],
-        postOwner: auth.currentUser.uid,
+        likesArr: [],
+        commentsArr: [],
+        postAuthor: auth.currentUser.uid,
         creationDate: new Date().getTime(),
       });
       return;
