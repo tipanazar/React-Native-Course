@@ -104,3 +104,18 @@ export const addComment = createAsyncThunk(
     }
   }
 );
+
+export const removeComment = createAsyncThunk(
+  "posts/removeComment",
+  async ({ data }, { rejectWithValue }) => {
+    try {
+      const { commentObj, postId } = data;
+      const postRef = doc(firestoreApp, `posts/${postId}`);
+      await updateDoc(postRef, {
+        commentsArr: arrayRemove(commentObj),
+      });
+    } catch (err) {
+      return rejectWithValue(err.toString());
+    }
+  }
+);

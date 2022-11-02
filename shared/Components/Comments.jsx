@@ -10,10 +10,12 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
+  Pressable,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 import { resetPostErrorAction } from "../../redux/post/postActions";
-import { addComment } from "../../redux/post/postOperations";
+import { addComment, removeComment } from "../../redux/post/postOperations";
 import { getPostsState, getUserState } from "../../redux/selectors";
 import dateParser from "../../shared/hooks/dateParser";
 import { ArrowUp } from "../../shared/SvgComponents";
@@ -58,9 +60,29 @@ const Comments = ({ route }) => {
     );
   };
 
+  const handleDelete = ({ comment }) => {
+    Alert.alert("Delete comment?", `Text: «${comment.text}»`, [
+      { text: "Copy", onPress: () => Clipboard.setStringAsync(comment.text) },
+      { text: "NO" },
+      {
+        text: "YES",
+        onPress: () =>
+          dispatch(
+            removeComment({
+              data: {
+                commentObj: comment,
+                postId,
+              },
+            })
+          ),
+      },
+    ]);
+  };
+
   const renderItem = ({ item: comment }) => {
     return (
-      <View
+      <Pressable
+        onLongPress={() => handleDelete({ comment })}
         style={{
           ...styles.commentItem,
           flexDirection: comment.sender.id === userId ? "row-reverse" : "row",
@@ -109,7 +131,7 @@ const Comments = ({ route }) => {
             </Text>
           </View>
         </View>
-      </View>
+      </Pressable>
     );
   };
 
