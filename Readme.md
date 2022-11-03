@@ -4,4 +4,4 @@ React-Native-Course
 2. Open the camera on your device
 3. Scan the code below
 
-<img src="https://qr.expo.dev/expo-go?owner=tipanazar&slug=React-Native-Course&releaseChannel=default&host=exp.host"/>
+<img src="https://qr.expo.dev/expo-go?owner=tipanazar&slug=React-Native-Course&releaseChannel=default&host=exp.host" height="200px"/>
