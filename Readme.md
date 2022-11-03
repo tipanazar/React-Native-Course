@@ -5,4 +5,5 @@ React-Native-Course
 
 <img src="https://qr.expo.dev/expo-go?owner=tipanazar&slug=React-Native-Course&releaseChannel=default&host=exp.host" height="200px" alt="QR-code"/>
 
-<a href="exp://exp.host/@tipanazar/React-Native-Course?release-channel=default">Link to the project</a>
+<p>or open this link in Expo GO:</p>
+<p>exp://exp.host/@tipanazar/React-Native-Course?release-channel=default</p>
