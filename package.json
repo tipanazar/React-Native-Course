@@ -8,11 +8,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^6.3.3",
+    "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.12",
     "@react-navigation/stack": "^6.2.3",
     "@reduxjs/toolkit": "^1.8.6",
-    "expo": "46.0.7",
+    "expo": "^46.0.16",
     "expo-app-loading": "^2.1.0",
     "expo-camera": "^12.3.0",
     "expo-clipboard": "^3.1.0",
@@ -22,20 +22,18 @@
     "expo-media-library": "^14.2.0",
     "expo-splash-screen": "^0.16.2",
     "expo-status-bar": "1.4.0",
+    "expo-updates": "~0.14.6",
     "firebase": "^9.12.1",
-    "link": "^1.5.1",
-    "prop-types": "15.8.1",
     "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-hide-with-keyboard": "^1.2.1",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-maps": "^0.31.1",
-    "react-native-responsive-screen": "^1.4.2",
+    "react-native-screens": "~3.15.0",
     "react-native-svg": "12.3.0",
-    "react-redux": "^8.0.4",
-    "expo-updates": "~0.14.6",
-    "react-dom": "18.0.0",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "react-redux": "^8.0.4"
   },
   "devDependencies": {
     "@babel/core": "7.12.9"

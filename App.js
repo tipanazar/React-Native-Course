@@ -21,15 +21,9 @@ const App = () => {
           RobotoMedium: require("./assets/fonts/Roboto-Medium.ttf"),
           RobotoBold: require("./assets/fonts/Roboto-Bold.ttf"),
         });
-        const images = [
-          require("./assets/background.png"),
-          require("./assets/myAvatar.jpg"),
-        ];
-        const cacheImages = images.map((image) => {
-          return Asset.fromModule(image).downloadAsync();
-        });
-
-        await Promise.all(cacheImages);
+        await Promise.all(
+          Asset.fromModule(require("./assets/background.png")).downloadAsync()
+        );
       } catch (err) {
         console.warn(err);
       } finally {
